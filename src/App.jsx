@@ -543,33 +543,15 @@ function WorksPage({ phone }) {
     },
   ]
 
-  const [isMobileViewport, setIsMobileViewport] = useState(window.innerWidth < 768)
   const [activeReelIndex, setActiveReelIndex] = useState(0)
   const reelVideoRefs = useRef([])
 
   const handleReelEnded = (index) => {
-    if (isMobileViewport) {
-      return
-    }
-
     const nextIndex = (index + 1) % reelProjects.length
     setActiveReelIndex(nextIndex)
   }
 
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobileViewport(window.innerWidth < 768)
-    }
-
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
-
-  useEffect(() => {
-    if (isMobileViewport) {
-      return
-    }
-
     const currentVideo = reelVideoRefs.current[activeReelIndex]
     if (!currentVideo) {
       return
@@ -590,7 +572,7 @@ function WorksPage({ phone }) {
     if (playAttempt && typeof playAttempt.catch === 'function') {
       playAttempt.catch(() => {})
     }
-  }, [activeReelIndex, isMobileViewport, reelProjects.length])
+  }, [activeReelIndex, reelProjects.length])
 
   const trustPills = [
     {
@@ -698,7 +680,7 @@ function WorksPage({ phone }) {
                         return
                       }
 
-                      if (isMobileViewport || activeReelIndex === index) {
+                      if (activeReelIndex === index) {
                         currentVideo.defaultMuted = true
                         currentVideo.muted = true
                         const playAttempt = currentVideo.play()
@@ -708,16 +690,16 @@ function WorksPage({ phone }) {
                       }
                     }}
                     onPlay={() => {
-                      if (!isMobileViewport && activeReelIndex !== index) {
+                      if (activeReelIndex !== index) {
                         setActiveReelIndex(index)
                       }
                     }}
                     onEnded={() => handleReelEnded(index)}
                     muted
-                    loop={isMobileViewport}
+                    loop={false}
                     controls
                     playsInline
-                    autoPlay={isMobileViewport || index === 0}
+                    autoPlay={index === 0}
                     preload="metadata"
                   />
 
