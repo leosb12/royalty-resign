@@ -1,0 +1,13 @@
+# Royalty Resin crawl policy
+User-agent: *
+Allow: /
+
+# Keep core app routes indexable
+Allow: /contact
+Allow: /works
+
+# Canonical sitemap location
+Sitemap: https://www.royaltyresin270.com/sitemap.xml
+
+# Optional host hint for crawlers that support it
+Host: www.royaltyresin270.com
