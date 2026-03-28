@@ -239,9 +239,63 @@ function GlobalHeader({ facebookUrl, pathname }) {
 
 function ContactPage({ phone, facebookUrl }) {
   const [projectType, setProjectType] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitFeedback, setSubmitFeedback] = useState({
+    type: 'idle',
+    message: '',
+  })
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
+
+    const formElement = event.currentTarget
+    const formData = new FormData(formElement)
+
+    const selectedProjectType = (formData.get('projectType') || '').toString().trim()
+    const otherProjectType = (formData.get('projectTypeOther') || '').toString().trim()
+
+    const payload = {
+      fullName: (formData.get('fullName') || '').toString().trim(),
+      email: (formData.get('email') || '').toString().trim(),
+      phone: (formData.get('phone') || '').toString().trim(),
+      projectType:
+        selectedProjectType === 'other' && otherProjectType
+          ? `Other: ${otherProjectType}`
+          : selectedProjectType,
+      preferredTimeline: (formData.get('timeline') || '').toString().trim(),
+      projectDetails: (formData.get('message') || '').toString().trim(),
+    }
+
+    try {
+      setIsSubmitting(true)
+      setSubmitFeedback({ type: 'idle', message: '' })
+
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      })
+
+      if (!response.ok) {
+        throw new Error('Contact form request failed')
+      }
+
+      setSubmitFeedback({
+        type: 'success',
+        message: 'Your request was sent successfully. We will contact you shortly.',
+      })
+      formElement.reset()
+      setProjectType('')
+    } catch {
+      setSubmitFeedback({
+        type: 'error',
+        message: `An error occurred while sending the form. Please contact us at ${phone}.`,
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -416,11 +470,24 @@ function ContactPage({ phone, facebookUrl }) {
               />
             </div>
 
+            {submitFeedback.type !== 'idle' && (
+              <p
+                className={`rounded-xl border px-4 py-3 text-sm leading-relaxed ${
+                  submitFeedback.type === 'success'
+                    ? 'border-emerald-400/40 bg-emerald-500/10 text-emerald-100'
+                    : 'border-red-400/40 bg-red-500/10 text-red-100'
+                }`}
+              >
+                {submitFeedback.message}
+              </p>
+            )}
+
             <button
               type="submit"
-              className="mt-1 inline-flex items-center justify-center gap-2 rounded-full bg-[#ef2b37] px-8 py-3 font-display text-sm uppercase tracking-[0.2em] text-white transition hover:bg-[#c41722]"
+              disabled={isSubmitting}
+              className="mt-1 inline-flex items-center justify-center gap-2 rounded-full bg-[#ef2b37] px-8 py-3 font-display text-sm uppercase tracking-[0.2em] text-white transition hover:bg-[#c41722] disabled:cursor-not-allowed disabled:opacity-70"
             >
-              Submit Request
+              {isSubmitting ? 'Sending...' : 'Submit Request'}
             </button>
           </form>
         </motion.section>
