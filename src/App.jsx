@@ -10,12 +10,198 @@ import {
   Hammer,
   Layers3,
   MapPin,
+  Menu,
   MessageCircle,
   PaintBucket,
   PhoneCall,
   ShieldCheck,
   Star,
+  X,
 } from 'lucide-react'
+
+function GlobalHeader({ facebookUrl, pathname }) {
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [currentHash, setCurrentHash] = useState(window.location.hash || '')
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      setCurrentHash(window.location.hash || '')
+    }
+
+    window.addEventListener('hashchange', handleHashChange)
+    return () => window.removeEventListener('hashchange', handleHashChange)
+  }, [])
+
+  useEffect(() => {
+    const scrollToFaqIfNeeded = () => {
+      if ((window.location.hash || '').toLowerCase() !== '#faq') {
+        return
+      }
+
+      const faqSection = document.getElementById('faq')
+      if (!faqSection) {
+        return
+      }
+
+      faqSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+
+    // Wait one frame so the section exists after route render.
+    const frameId = window.requestAnimationFrame(scrollToFaqIfNeeded)
+    window.addEventListener('hashchange', scrollToFaqIfNeeded)
+
+    return () => {
+      window.cancelAnimationFrame(frameId)
+      window.removeEventListener('hashchange', scrollToFaqIfNeeded)
+    }
+  }, [pathname])
+
+  const handleNavClick = (key) => {
+    if (key === 'faq') {
+      setCurrentHash('#faq')
+    } else {
+      setCurrentHash('')
+    }
+  }
+
+  const handleFaqClick = (event) => {
+    event.preventDefault()
+    setCurrentHash('#faq')
+
+    const currentPath = window.location.pathname.replace(/\/+$/, '') || '/'
+    if (currentPath !== '/') {
+      window.location.assign('/#faq')
+      return
+    }
+
+    window.history.replaceState(null, '', '/#faq')
+    const faqSection = document.getElementById('faq')
+    if (faqSection) {
+      faqSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }
+
+  const navItems = [
+    { label: 'Our Work', href: '/works', key: 'works' },
+    { label: 'About Us', href: '/about', key: 'about' },
+    { label: 'Contact', href: '/contact', key: 'contact' },
+    { label: 'Faq', href: '/#faq', key: 'faq' },
+  ]
+
+  return (
+    <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/10 bg-black/35 backdrop-blur-md">
+      <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-3 sm:px-6 md:px-10">
+        <a href="/" className="shrink-0">
+          <p className="font-brand text-2xl leading-none text-[#f0f3f8] md:text-3xl">
+            Royalty Resin
+          </p>
+          <p className="font-display text-[10px] uppercase tracking-[0.28em] text-[#ef2b37] sm:text-xs">
+            Premium Flooring Studio
+          </p>
+        </a>
+
+        <nav className="hidden items-center gap-1 lg:flex">
+          {navItems.map((item) => {
+            const isActive =
+              item.key === 'faq'
+                ? pathname === '/' && currentHash.toLowerCase() === '#faq'
+                : pathname === item.href
+
+            return (
+              <a
+                key={item.key}
+                href={item.href}
+                onClick={(event) => {
+                  if (item.key === 'faq') {
+                    handleFaqClick(event)
+                    return
+                  }
+
+                  handleNavClick(item.key)
+                }}
+                className={`rounded-full px-4 py-2 font-display text-xs uppercase tracking-[0.18em] transition ${
+                  isActive
+                    ? 'bg-[#ef2b37]/90 text-white'
+                    : 'text-white/80 hover:bg-white/10 hover:text-white'
+                }`}
+              >
+                {item.label}
+              </a>
+            )
+          })}
+        </nav>
+
+        <div className="hidden items-center gap-2 lg:flex">
+          <a
+            href={facebookUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/35 px-4 py-2 font-display text-xs uppercase tracking-[0.18em] text-white transition hover:bg-white/10"
+          >
+            <MessageCircle size={14} />
+            Facebook
+          </a>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => setMenuOpen((current) => !current)}
+          className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/20 bg-black/40 text-white transition hover:bg-white/10 lg:hidden"
+          aria-label="Toggle navigation menu"
+          aria-expanded={menuOpen}
+        >
+          {menuOpen ? <X size={18} /> : <Menu size={18} />}
+        </button>
+      </div>
+
+      {menuOpen && (
+        <div className="border-t border-white/10 bg-black/75 px-4 pb-4 pt-3 backdrop-blur-md sm:px-6 lg:hidden">
+          <nav className="grid gap-2">
+            {navItems.map((item) => {
+              const isActive =
+                item.key === 'faq'
+                  ? pathname === '/' && currentHash.toLowerCase() === '#faq'
+                  : pathname === item.href
+
+              return (
+                <a
+                  key={item.key}
+                  href={item.href}
+                  onClick={(event) => {
+                    if (item.key === 'faq') {
+                      handleFaqClick(event)
+                    } else {
+                      handleNavClick(item.key)
+                    }
+
+                    setMenuOpen(false)
+                  }}
+                  className={`rounded-xl px-4 py-2.5 font-display text-xs uppercase tracking-[0.18em] transition ${
+                    isActive
+                      ? 'bg-[#ef2b37]/90 text-white'
+                      : 'bg-white/[0.03] text-white/85 hover:bg-white/10 hover:text-white'
+                  }`}
+                >
+                  {item.label}
+                </a>
+              )
+            })}
+
+            <a
+              href={facebookUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-1 inline-flex items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/[0.04] px-4 py-2.5 font-display text-xs uppercase tracking-[0.18em] text-white/85 transition hover:bg-white/10"
+            >
+              <MessageCircle size={14} />
+              Follow on Facebook
+            </a>
+          </nav>
+        </div>
+      )}
+    </header>
+  )
+}
 
 function ContactPage({ phone, facebookUrl }) {
   const [projectType, setProjectType] = useState('')
@@ -25,7 +211,7 @@ function ContactPage({ phone, facebookUrl }) {
   }
 
   return (
-    <div className="min-h-screen px-4 py-10 text-white sm:px-6 md:px-10">
+    <div className="min-h-screen px-4 pb-10 pt-28 text-white sm:px-6 md:px-10">
       <div className="mx-auto w-full max-w-5xl">
         <a
           href="/"
@@ -204,12 +390,132 @@ function ContactPage({ phone, facebookUrl }) {
   )
 }
 
+function AboutPage({ phone, facebookUrl }) {
+  const pillars = [
+    {
+      title: 'Craft-Driven Process',
+      description: 'Every project follows strict prep, coating, and finishing standards for reliable long-term performance.',
+      icon: ShieldCheck,
+    },
+    {
+      title: 'Design and Performance',
+      description: 'We blend statement-level aesthetics with systems engineered for daily traffic and easy maintenance.',
+      icon: PaintBucket,
+    },
+    {
+      title: 'Local Team, Professional Results',
+      description: 'Based in Bowling Green, our crew serves homeowners and businesses with disciplined execution.',
+      icon: MapPin,
+    },
+  ]
+
+  return (
+    <div className="min-h-screen px-4 pb-12 pt-28 text-white sm:px-6 md:px-10">
+      <div className="mx-auto w-full max-w-7xl">
+        <section className="grid gap-6 rounded-3xl border border-white/10 bg-white/[0.03] p-6 md:p-10 lg:grid-cols-[1.05fr_0.95fr]">
+          <div>
+            <p className="font-display text-xs uppercase tracking-[0.24em] text-[#ef2b37]">
+              About Us
+            </p>
+            <h1 className="mt-4 font-display text-5xl uppercase leading-[0.9] text-white md:text-6xl">
+              Built on Craft and Consistency
+            </h1>
+            <p className="mt-4 max-w-2xl text-base leading-relaxed text-white/70 md:text-lg">
+              Royalty Resin was built to deliver elite resin and epoxy floors for
+              homes, garages, and commercial spaces. We focus on surface science,
+              clean execution, and finishes that stay impressive over time.
+            </p>
+
+            <div className="mt-6 flex flex-wrap gap-3">
+              <a
+                href={`tel:${phone}`}
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-[#ef2b37] px-6 py-3 font-display text-xs uppercase tracking-[0.2em] text-white transition hover:bg-[#c41722]"
+              >
+                <PhoneCall size={15} />
+                Call {phone}
+              </a>
+              <a
+                href={facebookUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 py-3 font-display text-xs uppercase tracking-[0.2em] text-white transition hover:bg-white/20"
+              >
+                <MessageCircle size={15} />
+                Message on Facebook
+              </a>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3 sm:gap-4">
+            <img
+              src="/garage.jpg"
+              alt="Royalty Resin garage installation"
+              className="h-52 w-full rounded-2xl object-cover sm:h-64"
+              loading="eager"
+            />
+            <img
+              src="/floor.jpg"
+              alt="Royalty Resin metallic floor finish"
+              className="h-52 w-full rounded-2xl object-cover sm:h-64"
+              loading="lazy"
+            />
+            <img
+              src="/garageresin.jpg"
+              alt="Royalty Resin finished flake floor"
+              className="col-span-2 h-56 w-full rounded-2xl object-cover sm:h-72"
+              loading="lazy"
+            />
+          </div>
+        </section>
+
+        <section className="mt-8 grid gap-4 md:grid-cols-3">
+          {pillars.map((pillar) => {
+            const Icon = pillar.icon
+
+            return (
+              <article
+                key={pillar.title}
+                className="rounded-2xl border border-white/10 bg-white/[0.03] p-5"
+              >
+                <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-[#ef2b37]/30 bg-[#ef2b37]/10">
+                  <Icon size={20} className="text-[#ef2b37]" />
+                </div>
+                <h2 className="mt-4 font-display text-2xl uppercase leading-[0.94] text-white">
+                  {pillar.title}
+                </h2>
+                <p className="mt-2 text-sm leading-relaxed text-white/72 md:text-base">
+                  {pillar.description}
+                </p>
+              </article>
+            )
+          })}
+        </section>
+
+        <section className="mt-8 rounded-3xl border border-white/10 bg-gradient-to-r from-white/[0.03] to-[#ef2b37]/[0.08] p-6 md:p-8">
+          <p className="font-display text-xs uppercase tracking-[0.22em] text-[#ef2b37]">
+            Our Promise
+          </p>
+          <h2 className="mt-3 font-display text-4xl uppercase leading-[0.9] text-white md:text-5xl">
+            Results that look premium and perform daily.
+          </h2>
+          <p className="mt-3 max-w-3xl text-base leading-relaxed text-white/70 md:text-lg">
+            We do not skip preparation, we do not cut corners, and we do not
+            compromise finish quality. Every Royalty Resin floor is built to be
+            visually strong and structurally dependable.
+          </p>
+        </section>
+      </div>
+    </div>
+  )
+}
+
 function WorksPage({ phone }) {
   const reelProjects = [
     {
       title: 'Basement Revival Build',
       category: 'Basement Transformation',
       video: '/projects/Video%20project%201basement.mp4',
+      poster: '/before%20floor%20garage.jpg',
       description:
         'A full basement upgrade with moisture-managed prep and a seamless resin finish built for clean daily performance.',
       highlights: ['Basement Upgrade', 'Moisture-Aware Prep'],
@@ -219,6 +525,7 @@ function WorksPage({ phone }) {
       title: '700 SQFT Garage Flake System',
       category: 'Garage Flake Makeover',
       video: '/projects/Video%20Project%202.mp4',
+      poster: '/garage.jpg',
       description:
         'This 700 sq ft garage moved from plain slab to a premium flake blend, executed with strict prep and precision topcoating.',
       highlights: ['Flake Blend Finish', 'Prep-to-Perfection'],
@@ -228,6 +535,7 @@ function WorksPage({ phone }) {
       title: 'Royalty Signature Finish',
       category: 'Royalty Signature Coating',
       video: '/projects/Video%20Project%203.mp4',
+      poster: '/garageresin.jpg',
       description:
         'Your floor deserves the Royalty treatment: elevated style, durable protection, and a finish designed to stand out long-term.',
       highlights: ['Luxury Look', 'High-Traffic Ready'],
@@ -235,15 +543,33 @@ function WorksPage({ phone }) {
     },
   ]
 
+  const [isMobileViewport, setIsMobileViewport] = useState(window.innerWidth < 768)
   const [activeReelIndex, setActiveReelIndex] = useState(0)
   const reelVideoRefs = useRef([])
 
   const handleReelEnded = (index) => {
+    if (isMobileViewport) {
+      return
+    }
+
     const nextIndex = (index + 1) % reelProjects.length
     setActiveReelIndex(nextIndex)
   }
 
   useEffect(() => {
+    const handleResize = () => {
+      setIsMobileViewport(window.innerWidth < 768)
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  useEffect(() => {
+    if (isMobileViewport) {
+      return
+    }
+
     const currentVideo = reelVideoRefs.current[activeReelIndex]
     if (!currentVideo) {
       return
@@ -258,11 +584,13 @@ function WorksPage({ phone }) {
     })
 
     currentVideo.currentTime = 0
+    currentVideo.defaultMuted = true
+    currentVideo.muted = true
     const playAttempt = currentVideo.play()
     if (playAttempt && typeof playAttempt.catch === 'function') {
       playAttempt.catch(() => {})
     }
-  }, [activeReelIndex, reelProjects.length])
+  }, [activeReelIndex, isMobileViewport, reelProjects.length])
 
   const trustPills = [
     {
@@ -280,7 +608,7 @@ function WorksPage({ phone }) {
   ]
 
   return (
-    <div className="min-h-screen px-4 py-10 text-white sm:px-6 md:px-10">
+    <div className="min-h-screen px-4 pb-10 pt-28 text-white sm:px-6 md:px-10">
       <div className="mx-auto w-full max-w-7xl">
         <a
           href="/"
@@ -359,21 +687,37 @@ function WorksPage({ phone }) {
                 >
                   <video
                     src={project.video}
+                    poster={project.poster}
                     className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-[1.03]"
                     ref={(element) => {
                       reelVideoRefs.current[index] = element
                     }}
+                    onLoadedData={() => {
+                      const currentVideo = reelVideoRefs.current[index]
+                      if (!currentVideo) {
+                        return
+                      }
+
+                      if (isMobileViewport || activeReelIndex === index) {
+                        currentVideo.defaultMuted = true
+                        currentVideo.muted = true
+                        const playAttempt = currentVideo.play()
+                        if (playAttempt && typeof playAttempt.catch === 'function') {
+                          playAttempt.catch(() => {})
+                        }
+                      }
+                    }}
                     onPlay={() => {
-                      if (activeReelIndex !== index) {
+                      if (!isMobileViewport && activeReelIndex !== index) {
                         setActiveReelIndex(index)
                       }
                     }}
                     onEnded={() => handleReelEnded(index)}
                     muted
-                    loop={false}
+                    loop={isMobileViewport}
                     controls
                     playsInline
-                    autoPlay={index === 0}
+                    autoPlay={isMobileViewport || index === 0}
                     preload="metadata"
                   />
 
@@ -515,11 +859,36 @@ function App() {
   const normalizedPathname = window.location.pathname.replace(/\/+$/, '') || '/'
 
   if (normalizedPathname === '/contact') {
-    return <ContactPage phone={phone} facebookUrl={facebookUrl} />
+    return (
+      <div className="min-h-screen text-white">
+        <GlobalHeader facebookUrl={facebookUrl} pathname={normalizedPathname} />
+        <main>
+          <ContactPage phone={phone} facebookUrl={facebookUrl} />
+        </main>
+      </div>
+    )
   }
 
   if (normalizedPathname === '/works') {
-    return <WorksPage phone={phone} />
+    return (
+      <div className="min-h-screen text-white">
+        <GlobalHeader facebookUrl={facebookUrl} pathname={normalizedPathname} />
+        <main>
+          <WorksPage phone={phone} />
+        </main>
+      </div>
+    )
+  }
+
+  if (normalizedPathname === '/about') {
+    return (
+      <div className="min-h-screen text-white">
+        <GlobalHeader facebookUrl={facebookUrl} pathname={normalizedPathname} />
+        <main>
+          <AboutPage phone={phone} facebookUrl={facebookUrl} />
+        </main>
+      </div>
+    )
   }
 
   const banners = [
@@ -725,28 +1094,7 @@ function App() {
 
   return (
     <div className="min-h-screen text-white">
-      <header className="fixed left-0 right-0 top-0 z-50 bg-black/30 backdrop-blur-md">
-        <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-4 sm:px-6 md:px-10">
-          <div>
-            <p className="font-brand text-3xl leading-none text-[#f0f3f8] md:text-4xl">
-              Royalty Resin
-            </p>
-            <p className="font-display text-[10px] uppercase tracking-[0.28em] text-[#ef2b37] sm:text-xs">
-              Premium Flooring Studio
-            </p>
-          </div>
-
-          <a
-            href={facebookUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="hidden items-center gap-2 rounded-full border border-white/20 bg-black/35 px-4 py-2 font-display text-xs uppercase tracking-[0.18em] text-white transition hover:bg-white/10 md:inline-flex"
-          >
-            <MessageCircle size={15} />
-            Follow on Facebook
-          </a>
-        </div>
-      </header>
+      <GlobalHeader facebookUrl={facebookUrl} pathname={normalizedPathname} />
 
       <main>
         <section className="relative isolate overflow-hidden">
@@ -1288,7 +1636,7 @@ function App() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 md:px-10 md:pb-20">
+        <section id="faq" className="mx-auto max-w-7xl scroll-mt-28 px-4 pb-16 sm:px-6 md:px-10 md:pb-20">
           <div className="mb-8">
             <p className="font-display text-sm uppercase tracking-[0.2em] text-[#ef2b37]">
               FAQ
