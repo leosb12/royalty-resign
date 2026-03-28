@@ -26,10 +26,28 @@ body {
   margin: 0;
   font-family: 'Barlow Condensed', sans-serif;
   background:
-    radial-gradient(circle at 20% 15%, rgba(239, 43, 55, 0.24), transparent 30%),
-    radial-gradient(circle at 80% 80%, rgba(167, 176, 189, 0.12), transparent 35%),
-    linear-gradient(145deg, #040405 0%, #0a0d14 45%, #12070a 100%);
+    radial-gradient(circle at 12% 10%, rgba(239, 43, 55, 0.24), transparent 34%),
+    radial-gradient(circle at 88% 18%, rgba(46, 92, 148, 0.22), transparent 34%),
+    radial-gradient(circle at 74% 86%, rgba(180, 188, 202, 0.16), transparent 40%),
+    repeating-linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.006) 0px,
+      rgba(255, 255, 255, 0.006) 1px,
+      transparent 7px,
+      transparent 34px
+    ),
+    repeating-linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.012) 0px,
+      rgba(255, 255, 255, 0.012) 1px,
+      rgba(255, 255, 255, 0.004) 1px,
+      rgba(255, 255, 255, 0.001) 4px,
+      transparent 9px,
+      transparent 30px
+    ),
+    linear-gradient(145deg, #11151f 0%, #17101a 34%, #0e1320 68%, #0f171f 100%);
   color: #edf1f7;
+  background-attachment: fixed;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -87,6 +105,43 @@ body {
   animation: drift-slow 9s ease-in-out infinite;
 }
 
+.service-image-worm-svg {
+  pointer-events: none;
+  position: absolute;
+  left: -7px;
+  top: -7px;
+  width: calc(100% + 14px);
+  height: calc(100% + 14px);
+  overflow: visible;
+  z-index: 5;
+}
+
+.service-image-worm-track {
+  fill: none;
+  stroke: rgba(239, 43, 55, 0.24);
+  stroke-width: 0.8;
+}
+
+.service-image-worm-core,
+.service-image-worm-glow {
+  fill: none;
+  stroke-linecap: round;
+  stroke-dasharray: 14 86;
+  stroke-dashoffset: 0;
+  animation: service-border-worm 2.3s linear infinite;
+}
+
+.service-image-worm-core {
+  stroke: rgba(239, 43, 55, 1);
+  stroke-width: 1.7;
+}
+
+.service-image-worm-glow {
+  stroke: rgba(239, 43, 55, 0.58);
+  stroke-width: 3.9;
+  filter: blur(1.35px);
+}
+
 @keyframes reveal-up {
   from {
     opacity: 0;
@@ -109,5 +164,15 @@ body {
 
   50% {
     transform: translate3d(0, -15px, 0);
+  }
+}
+
+@keyframes service-border-worm {
+  from {
+    stroke-dashoffset: 0;
+  }
+
+  to {
+    stroke-dashoffset: -100;
   }
 }

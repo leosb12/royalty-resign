@@ -3,9 +3,9 @@ import {
   ArrowRight,
   Building2,
   CheckCircle2,
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
-  Clock3,
   Droplets,
   Hammer,
   Layers3,
@@ -14,15 +14,316 @@ import {
   PaintBucket,
   PhoneCall,
   ShieldCheck,
-  Sparkles,
   Star,
 } from 'lucide-react'
+
+function ContactPage({ phone, facebookUrl }) {
+  const [projectType, setProjectType] = useState('')
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+  }
+
+  return (
+    <div className="min-h-screen px-4 py-10 text-white sm:px-6 md:px-10">
+      <div className="mx-auto w-full max-w-5xl">
+        <a
+          href="/"
+          className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-4 py-2 font-display text-xs uppercase tracking-[0.18em] text-white transition hover:bg-white/10"
+        >
+          <ArrowRight size={14} className="rotate-180" />
+          Back to Home
+        </a>
+
+        <section className="mt-6 grid gap-6 rounded-3xl border border-white/10 bg-white/[0.03] p-6 md:grid-cols-[0.9fr_1.1fr] md:p-10">
+          <div>
+            <p className="font-display text-xs uppercase tracking-[0.24em] text-[#ef2b37]">
+              Contact Royalty Resin
+            </p>
+            <h1 className="mt-4 font-display text-5xl uppercase leading-[0.9] text-white md:text-6xl">
+              Let&apos;s Build Your Floor
+            </h1>
+            <p className="mt-4 max-w-md text-base leading-relaxed text-white/70">
+              Tell us about your project and we will reach out with the best
+              system, timeline, and estimate options for your space.
+            </p>
+
+            <div className="mt-6 space-y-3">
+              <a
+                href={`tel:${phone}`}
+                className="flex items-center gap-3 rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-white/85 transition hover:bg-black/45"
+              >
+                <PhoneCall size={16} className="text-[#ef2b37]" />
+                {phone}
+              </a>
+              <a
+                href={facebookUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center gap-3 rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-white/85 transition hover:bg-black/45"
+              >
+                <MessageCircle size={16} className="text-[#ef2b37]" />
+                Message us on Facebook
+              </a>
+            </div>
+          </div>
+
+          <form onSubmit={handleSubmit} className="grid gap-4">
+            <div className="grid gap-2">
+              <label htmlFor="fullName" className="text-sm uppercase tracking-[0.16em] text-white/70">
+                Full Name
+              </label>
+              <input
+                id="fullName"
+                name="fullName"
+                type="text"
+                required
+                className="rounded-xl border border-white/15 bg-black/30 px-4 py-3 text-white placeholder:text-white/35 focus:border-[#ef2b37]/70 focus:outline-none"
+                placeholder="Your full name"
+              />
+            </div>
+
+            <div className="grid gap-2 md:grid-cols-2 md:gap-4">
+              <div className="grid gap-2">
+                <label htmlFor="email" className="text-sm uppercase tracking-[0.16em] text-white/70">
+                  Email
+                </label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  required
+                  className="rounded-xl border border-white/15 bg-black/30 px-4 py-3 text-white placeholder:text-white/35 focus:border-[#ef2b37]/70 focus:outline-none"
+                  placeholder="you@email.com"
+                />
+              </div>
+
+              <div className="grid gap-2">
+                <label htmlFor="phone" className="text-sm uppercase tracking-[0.16em] text-white/70">
+                  Phone
+                </label>
+                <input
+                  id="phone"
+                  name="phone"
+                  type="tel"
+                  required
+                  className="rounded-xl border border-white/15 bg-black/30 px-4 py-3 text-white placeholder:text-white/35 focus:border-[#ef2b37]/70 focus:outline-none"
+                  placeholder="(270) 000-0000"
+                />
+              </div>
+            </div>
+
+            <div className="grid gap-2 md:grid-cols-2 md:gap-4">
+              <div className="grid gap-2">
+                <label htmlFor="projectType" className="text-sm uppercase tracking-[0.16em] text-white/70">
+                  Project Type
+                </label>
+                <div className="relative">
+                  <select
+                    id="projectType"
+                    name="projectType"
+                    value={projectType}
+                    onChange={(event) => setProjectType(event.target.value)}
+                    className={`w-full appearance-none rounded-xl border bg-black/30 px-4 py-3 pr-11 focus:outline-none ${
+                      projectType === ''
+                        ? 'border-white/15 text-white/55 focus:border-[#ef2b37]/70'
+                        : 'border-[#ef2b37]/70 text-white'
+                    }`}
+                    required
+                  >
+                    <option value="" disabled hidden>
+                      Select project type
+                    </option>
+                    <option value="garage" className="bg-[#101010] text-white">Garage floor</option>
+                    <option value="basement" className="bg-[#101010] text-white">Basement floor</option>
+                    <option value="commercial" className="bg-[#101010] text-white">Commercial floor</option>
+                    <option value="custom" className="bg-[#101010] text-white">Custom epoxy design</option>
+                    <option value="other" className="bg-[#101010] text-white">Other</option>
+                  </select>
+                  <ChevronDown
+                    size={18}
+                    className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-white/70"
+                  />
+                </div>
+              </div>
+
+              <div className="grid gap-2">
+                <label htmlFor="timeline" className="text-sm uppercase tracking-[0.16em] text-white/70">
+                  Preferred Timeline
+                </label>
+                <input
+                  id="timeline"
+                  name="timeline"
+                  type="text"
+                  className="rounded-xl border border-white/15 bg-black/30 px-4 py-3 text-white placeholder:text-white/35 focus:border-[#ef2b37]/70 focus:outline-none"
+                  placeholder="e.g. Next 2-4 weeks"
+                />
+              </div>
+            </div>
+
+            {projectType === 'other' && (
+              <div className="grid gap-2">
+                <label htmlFor="projectTypeOther" className="text-sm uppercase tracking-[0.16em] text-white/70">
+                  Other Project Type
+                </label>
+                <input
+                  id="projectTypeOther"
+                  name="projectTypeOther"
+                  type="text"
+                  required
+                  className="rounded-xl border border-white/15 bg-black/30 px-4 py-3 text-white placeholder:text-white/35 focus:border-[#ef2b37]/70 focus:outline-none"
+                  placeholder="Write your project type"
+                />
+              </div>
+            )}
+
+            <div className="grid gap-2">
+              <label htmlFor="message" className="text-sm uppercase tracking-[0.16em] text-white/70">
+                Project Details
+              </label>
+              <textarea
+                id="message"
+                name="message"
+                rows={5}
+                required
+                className="resize-none rounded-xl border border-white/15 bg-black/30 px-4 py-3 text-white placeholder:text-white/35 focus:border-[#ef2b37]/70 focus:outline-none"
+                placeholder="Tell us about your space, style, and goals."
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="mt-1 inline-flex items-center justify-center gap-2 rounded-full bg-[#ef2b37] px-8 py-3 font-display text-sm uppercase tracking-[0.2em] text-white transition hover:bg-[#c41722]"
+            >
+              Submit Request
+            </button>
+          </form>
+        </section>
+      </div>
+    </div>
+  )
+}
+
+function WorksPage({ phone }) {
+  const portfolioItems = [
+    {
+      title: 'Garage Flake Transformation',
+      image: '/garageresin.jpg',
+      category: 'Garage System',
+      description:
+        'Full grind, crack repair, and multi-layer flake system finished with a UV-stable topcoat.',
+    },
+    {
+      title: 'Metallic Flow Statement Floor',
+      image: '/floor.jpg',
+      category: 'Custom Metallic',
+      description:
+        'A high-gloss metallic composition with movement and depth tailored to the room lighting.',
+    },
+    {
+      title: 'Commercial Traffic Coating',
+      image: '/daily.jpg',
+      category: 'Commercial',
+      description:
+        'Impact and abrasion-resistant system designed for frequent daily traffic and easy maintenance.',
+    },
+    {
+      title: 'Residential Garage Detail',
+      image: '/garage.jpg',
+      category: 'Residential',
+      description:
+        'Clean edge work and uniform broadcast texture with a premium finished shine.',
+    },
+  ]
+
+  return (
+    <div className="min-h-screen px-4 py-10 text-white sm:px-6 md:px-10">
+      <div className="mx-auto w-full max-w-7xl">
+        <a
+          href="/"
+          className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-4 py-2 font-display text-xs uppercase tracking-[0.18em] text-white transition hover:bg-white/10"
+        >
+          <ArrowRight size={14} className="rotate-180" />
+          Back to Home
+        </a>
+
+        <section className="mt-6 rounded-3xl border border-white/10 bg-white/[0.03] p-6 md:p-10">
+          <p className="font-display text-xs uppercase tracking-[0.24em] text-[#ef2b37]">
+            Works Portfolio
+          </p>
+          <h1 className="mt-4 font-display text-5xl uppercase leading-[0.9] text-white md:text-6xl">
+            Recent Floors We Built
+          </h1>
+          <p className="mt-4 max-w-3xl text-base leading-relaxed text-white/70 md:text-lg">
+            Explore a selection of our recent resin and epoxy installations across
+            garages, homes, and commercial environments.
+          </p>
+
+          <div className="mt-6 flex flex-wrap gap-3">
+            <a
+              href={`tel:${phone}`}
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-[#ef2b37] px-6 py-3 font-display text-xs uppercase tracking-[0.2em] text-white transition hover:bg-[#c41722]"
+            >
+              <PhoneCall size={15} />
+              Call for an Estimate
+            </a>
+            <a
+              href="/contact"
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 py-3 font-display text-xs uppercase tracking-[0.2em] text-white transition hover:bg-white/20"
+            >
+              Contact Us
+              <ArrowRight size={15} />
+            </a>
+          </div>
+        </section>
+
+        <section className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          {portfolioItems.map((item) => (
+            <article
+              key={item.title}
+              className="group overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03]"
+            >
+              <img
+                src={item.image}
+                alt={item.title}
+                className="h-64 w-full object-cover transition duration-500 group-hover:scale-105"
+                loading="lazy"
+              />
+              <div className="p-5">
+                <p className="font-display text-xs uppercase tracking-[0.2em] text-[#ef2b37]">
+                  {item.category}
+                </p>
+                <h2 className="mt-2 font-display text-2xl uppercase leading-tight text-white">
+                  {item.title}
+                </h2>
+                <p className="mt-3 text-sm leading-relaxed text-white/70">
+                  {item.description}
+                </p>
+              </div>
+            </article>
+          ))}
+        </section>
+      </div>
+    </div>
+  )
+}
 
 function App() {
   const phone = '270-779-9436'
   const facebookUrl = 'https://www.facebook.com/share/1CKSBtQhmn/?mibextid=wwXIfr'
+  const reelShareUrl = 'https://www.facebook.com/share/r/1D1K5u1uMs/'
+  const reelDirectUrl = 'https://www.facebook.com/reel/2086956575373191/'
+  const timeLapseVideoUrl = '/timelapsework.mp4'
   const autoSlideDelay = 6500
   const manualPauseDelay = 9000
+
+  if (window.location.pathname === '/contact') {
+    return <ContactPage phone={phone} facebookUrl={facebookUrl} />
+  }
+
+  if (window.location.pathname === '/works') {
+    return <WorksPage phone={phone} />
+  }
 
   const banners = [
     {
@@ -98,27 +399,55 @@ function App() {
   const gallery = [
     {
       title: 'Flake Garage System',
-      image:
-        'https://images.unsplash.com/photo-1560184897-ae75f418493e?auto=format&fit=crop&w=1200&q=80',
+      image: '/garageresin.jpg',
       tag: 'Clean. Tough. Timeless.',
     },
     {
       title: 'Metallic Resin Flow',
-      image:
-        'https://images.unsplash.com/photo-1604014056630-0f0d8d6b7657?auto=format&fit=crop&w=1200&q=80',
+      image: '/floor.jpg',
       tag: 'Art-level custom movement.',
     },
     {
       title: 'Commercial Durability',
-      image:
-        'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=1200&q=80',
+      image: '/daily.jpg',
       tag: 'Built for daily traffic.',
+    },
+  ]
+
+  const faqs = [
+    {
+      question: 'How long does an epoxy floor installation take?',
+      answer:
+        'Most residential projects are completed in 1 to 3 days depending on surface condition, prep requirements, and system complexity. We provide a clear timeline before starting.',
+    },
+    {
+      question: 'How long before I can walk or park on the floor?',
+      answer:
+        'Light foot traffic is typically possible within 24 hours. Vehicle traffic usually requires 48 to 72 hours, depending on temperature and the selected topcoat.',
+    },
+    {
+      question: 'Do epoxy floors crack or peel over time?',
+      answer:
+        'When the concrete is prepared correctly and moisture is addressed, epoxy systems hold up extremely well. Proper prep is the key factor for long-term adhesion and durability.',
+    },
+    {
+      question: 'Can you customize colors and design style?',
+      answer:
+        'Yes. We offer flake blends, metallic effects, and custom color options. During consultation, we match finish style to your space and usage goals.',
+    },
+    {
+      question: 'Do you handle residential and commercial jobs?',
+      answer:
+        'Absolutely. We install systems for garages, basements, workshops, storefronts, and other commercial areas across Bowling Green and nearby cities.',
     },
   ]
 
   const [activeBanner, setActiveBanner] = useState(0)
   const [autoplayPaused, setAutoplayPaused] = useState(false)
+  const [playTimeLapse, setPlayTimeLapse] = useState(false)
   const resumeAutoplayTimeoutRef = useRef(null)
+  const timeLapseSectionRef = useRef(null)
+  const timeLapseVideoRef = useRef(null)
 
   const pauseAutoplayTemporarily = () => {
     setAutoplayPaused(true)
@@ -163,8 +492,42 @@ function App() {
     }
   }, [])
 
+  useEffect(() => {
+    if (!timeLapseSectionRef.current || playTimeLapse) {
+      return undefined
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setPlayTimeLapse(true)
+          observer.disconnect()
+        }
+      },
+      {
+        threshold: 0.2,
+        rootMargin: '0px 0px -8% 0px',
+      },
+    )
+
+    observer.observe(timeLapseSectionRef.current)
+
+    return () => observer.disconnect()
+  }, [playTimeLapse])
+
+  useEffect(() => {
+    if (!playTimeLapse || !timeLapseVideoRef.current) {
+      return
+    }
+
+    const playAttempt = timeLapseVideoRef.current.play()
+    if (playAttempt && typeof playAttempt.catch === 'function') {
+      playAttempt.catch(() => {})
+    }
+  }, [playTimeLapse])
+
   return (
-    <div className="bg-[#060606] text-white">
+    <div className="min-h-screen text-white">
       <header className="fixed left-0 right-0 top-0 z-50 bg-black/30 backdrop-blur-md">
         <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-4 sm:px-6 md:px-10">
           <div>
@@ -296,31 +659,21 @@ function App() {
             </p>
 
             <h2 className="mt-6 font-display text-4xl uppercase leading-[0.9] text-white md:text-6xl">
-              Transform your floor into a signature space.
+              Built for impact. Engineered for daily wear.
             </h2>
 
             <p className="mt-5 max-w-xl text-base leading-relaxed text-white/70 md:text-lg">
-              Residential and commercial epoxy systems with elite craftsmanship,
-              dramatic aesthetics, and long-term durability. Built to look bold.
-              Built to perform daily.
+              We combine expert surface preparation, premium resin systems, and
+              precision finishing to deliver floors that resist stains,
+              scratching, and heavy traffic while still looking high-end.
             </p>
 
-            <div className="mt-8 flex flex-col gap-4 sm:flex-row">
+            <div className="mt-8">
               <a
-                href={`tel:${phone}`}
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-[#ef2b37] px-6 py-3 font-display text-sm uppercase tracking-[0.16em] text-white transition hover:bg-[#c41722]"
+                href="/contact"
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-[#ef2b37]/70 bg-[#ef2b37] px-8 py-3 font-display text-sm uppercase tracking-[0.2em] text-white transition hover:bg-[#c41722]"
               >
-                <PhoneCall size={17} />
-                Call for Free Estimate
-              </a>
-
-              <a
-                href={facebookUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/5 px-6 py-3 font-display text-sm uppercase tracking-[0.16em] text-white transition hover:bg-white/10"
-              >
-                Message us on Facebook
+                Contact Us
                 <ArrowRight size={16} />
               </a>
             </div>
@@ -353,8 +706,8 @@ function App() {
             <div className="mx-auto max-w-md">
               <article className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] p-3 shadow-2xl shadow-black/30">
                 <img
-                  src={gallery[1].image}
-                  alt="Metallic epoxy flooring design"
+                  src="/garage.jpg"
+                  alt="Garage epoxy flooring"
                   className="h-[24rem] w-full rounded-2xl object-cover md:h-[28rem]"
                   loading="eager"
                 />
@@ -370,8 +723,8 @@ function App() {
 
               <article className="absolute -left-10 top-8 hidden w-36 rotate-[-8deg] overflow-hidden rounded-2xl border border-white/15 bg-black/40 p-2 backdrop-blur-sm md:block">
                 <img
-                  src={gallery[0].image}
-                  alt="Flake epoxy garage flooring"
+                  src="/door.jpg"
+                  alt="Epoxy door detail"
                   className="h-36 w-full rounded-xl object-cover"
                   loading="lazy"
                 />
@@ -379,8 +732,8 @@ function App() {
 
               <article className="absolute -right-8 bottom-10 hidden w-32 rotate-[8deg] overflow-hidden rounded-2xl border border-white/15 bg-black/40 p-2 backdrop-blur-sm md:block">
                 <img
-                  src={gallery[2].image}
-                  alt="Commercial epoxy floor installation"
+                  src="/floor.jpg"
+                  alt="Epoxy floor detail"
                   className="h-32 w-full rounded-xl object-cover"
                   loading="lazy"
                 />
@@ -396,8 +749,45 @@ function App() {
             return (
               <article
                 key={service.title}
-                className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 transition hover:-translate-y-1 hover:border-[#ef2b37]/50"
+                className="relative overflow-visible rounded-3xl border border-white/10 bg-white/[0.03] p-6 transition hover:-translate-y-1"
               >
+                <svg
+                  className="service-image-worm-svg"
+                  viewBox="0 0 100 100"
+                  preserveAspectRatio="none"
+                  aria-hidden="true"
+                >
+                  <rect
+                    className="service-image-worm-track"
+                    x="1"
+                    y="1"
+                    width="98"
+                    height="98"
+                    rx="8"
+                    ry="8"
+                    pathLength="100"
+                  />
+                  <rect
+                    className="service-image-worm-glow"
+                    x="1"
+                    y="1"
+                    width="98"
+                    height="98"
+                    rx="8"
+                    ry="8"
+                    pathLength="100"
+                  />
+                  <rect
+                    className="service-image-worm-core"
+                    x="1"
+                    y="1"
+                    width="98"
+                    height="98"
+                    rx="8"
+                    ry="8"
+                    pathLength="100"
+                  />
+                </svg>
                 <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-xl border border-[#ef2b37]/30 bg-[#ef2b37]/10">
                   <Icon className="text-[#ef2b37]" />
                 </div>
@@ -519,44 +909,151 @@ function App() {
           </div>
         </section>
 
-        <section className="mx-auto grid max-w-7xl gap-6 px-4 pb-14 sm:px-6 md:grid-cols-3 md:px-10 md:pb-20">
-          <article className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-            <div className="mb-4 flex items-center gap-1 text-[#ef2b37]">
-              {Array.from({ length: 5 }).map((_, idx) => (
-                <Star key={idx} size={16} fill="currentColor" />
-              ))}
-            </div>
-            <p className="text-base leading-relaxed text-white/80">
-              Excellent craftsmanship and communication from start to finish. The
-              floor completely changed our garage.
-            </p>
-          </article>
+        <section
+          ref={timeLapseSectionRef}
+          className="mx-auto max-w-7xl px-4 pb-14 sm:px-6 md:px-10 md:pb-20"
+        >
+          <div className="grid items-center gap-8 lg:grid-cols-[1fr_auto] lg:gap-10">
+            <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 md:p-8">
+              <p className="font-display text-sm uppercase tracking-[0.2em] text-[#ef2b37]">
+                Our Work
+              </p>
+              <h2 className="mt-3 font-display text-4xl uppercase leading-[0.9] text-white md:text-5xl">
+                Real project time-lapse
+              </h2>
+              <p className="mt-4 max-w-3xl text-base leading-relaxed text-white/75 md:hidden">
+                Watch our crew prep, coat, and finish a real floor project with
+                professional detail from start to final shine.
+              </p>
+              <p className="mt-4 hidden max-w-3xl text-base leading-relaxed text-white/75 md:block md:text-lg">
+                Every floor begins with disciplined preparation: moisture checks,
+                crack treatment, and profile grinding. That foundation is what
+                allows the coating system to hold up under daily use.
+              </p>
+              <p className="mt-4 hidden max-w-3xl text-base leading-relaxed text-white/70 md:block md:text-lg">
+                In this time-lapse you can see our process in real conditions,
+                from first pass to final finish. We do not rush steps, we do not
+                cut corners, and we deliver the same professional standard on
+                every garage, basement, and commercial project.
+              </p>
 
-          <article className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-            <div className="mb-4 flex items-center gap-2 text-[#ef2b37]">
-              <Clock3 size={18} />
-              <span className="font-display text-sm uppercase tracking-wider text-white/80">
-                On-time project flow
-              </span>
-            </div>
-            <p className="text-base leading-relaxed text-white/80">
-              Fast, professional, and clean work. The final result looks high-end
-              and handles daily traffic with zero issues.
-            </p>
-          </article>
+              <ul className="mt-6 hidden gap-2 text-sm uppercase tracking-[0.15em] text-white/65 md:grid md:grid-cols-2">
+                <li className="rounded-xl border border-white/10 bg-black/20 px-3 py-2">Surface Prep First</li>
+                <li className="rounded-xl border border-white/10 bg-black/20 px-3 py-2">Clean Jobsite Workflow</li>
+                <li className="rounded-xl border border-white/10 bg-black/20 px-3 py-2">Coating System Accuracy</li>
+                <li className="rounded-xl border border-white/10 bg-black/20 px-3 py-2">Consistent Finish Quality</li>
+              </ul>
 
-          <article className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-            <div className="mb-4 flex items-center gap-2 text-[#ef2b37]">
-              <Sparkles size={18} />
-              <span className="font-display text-sm uppercase tracking-wider text-white/80">
-                Lasting finish
-              </span>
+              <div className="mt-5">
+                <div className="rounded-2xl border border-white/10 bg-gradient-to-r from-black/35 via-[#1a1012]/55 to-black/35 p-4 md:p-5">
+                  <p className="font-display text-xs uppercase tracking-[0.16em] text-white/65 md:text-sm">
+                    Want to explore more transformations?
+                  </p>
+                  <a
+                    href="/works"
+                    className="group mt-3 inline-flex items-center gap-2 rounded-full border border-[#ef2b37]/55 bg-[#ef2b37]/90 px-5 py-2.5 font-display text-xs uppercase tracking-[0.2em] text-white shadow-[0_0_0_1px_rgba(255,255,255,0.08)_inset,0_10px_30px_rgba(239,43,55,0.3)] transition hover:-translate-y-0.5 hover:bg-[#d8202c] hover:shadow-[0_0_0_1px_rgba(255,255,255,0.12)_inset,0_14px_34px_rgba(239,43,55,0.38)]"
+                  >
+                    Explore More Projects
+                    <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
+                  </a>
+                </div>
+              </div>
             </div>
-            <p className="text-base leading-relaxed text-white/80">
-              The metallic epoxy design turned out better than expected. It is the
-              first thing everyone notices when they walk in.
+
+            <div className="mx-auto w-full max-w-[320px] overflow-hidden rounded-3xl border border-white/10 bg-black/35 p-3 shadow-2xl shadow-black/35 sm:max-w-[340px] lg:mx-0 lg:w-[340px] lg:max-w-none">
+              <div className="relative w-full overflow-hidden rounded-2xl bg-black" style={{ aspectRatio: '9 / 16' }}>
+                <video
+                  ref={timeLapseVideoRef}
+                  src={timeLapseVideoUrl}
+                  className="absolute inset-0 h-full w-full object-cover"
+                  poster="/garage.jpg"
+                  muted
+                  loop
+                  controls
+                  playsInline
+                  autoPlay={playTimeLapse}
+                  preload="metadata"
+                />
+              </div>
+
+              <div className="pt-3 text-center">
+                <a
+                  href={reelDirectUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1.5 font-display text-[10px] uppercase tracking-[0.16em] text-white/60 transition hover:text-white/90"
+                >
+                  Open Full Reel on Facebook
+                  <ArrowRight size={12} />
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="mx-auto max-w-7xl px-4 pb-14 sm:px-6 md:px-10 md:pb-20">
+          <div className="mb-8">
+            <p className="font-display text-sm uppercase tracking-[0.2em] text-[#ef2b37]">
+              Client Recommendations
             </p>
-          </article>
+            <h2 className="mt-3 font-display text-4xl uppercase leading-[0.9] text-white md:text-5xl">
+              Real feedback from local projects
+            </h2>
+            <p className="mt-3 max-w-3xl text-base text-white/65 md:text-lg">
+              Reviews from homeowners and business owners in Bowling Green and
+              nearby areas after full installation and daily use.
+            </p>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-3">
+            <article className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+              <div className="mb-4 flex items-center gap-1 text-[#ef2b37]">
+                {Array.from({ length: 5 }).map((_, idx) => (
+                  <Star key={idx} size={16} fill="currentColor" />
+                ))}
+              </div>
+              <p className="text-base leading-relaxed text-white/80">
+                The crew showed up on schedule, prepped every crack correctly,
+                and finished our garage in two days. Cleanup was excellent and
+                the floor still looks brand new months later.
+              </p>
+              <p className="mt-5 font-display text-sm uppercase tracking-[0.18em] text-white/60">
+                Jason M. | 2-Car Garage | Bowling Green
+              </p>
+            </article>
+
+            <article className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+              <div className="mb-4 flex items-center gap-1 text-[#ef2b37]">
+                {Array.from({ length: 5 }).map((_, idx) => (
+                  <Star key={idx} size={16} fill="currentColor" />
+                ))}
+              </div>
+              <p className="text-base leading-relaxed text-white/80">
+                We needed a durable floor for our small retail backroom and they
+                nailed it. They explained cure time clearly, stayed on timeline,
+                and the finish handles carts and daily traffic perfectly.
+              </p>
+              <p className="mt-5 font-display text-sm uppercase tracking-[0.18em] text-white/60">
+                Maria L. | Commercial Space | Scottsville
+              </p>
+            </article>
+
+            <article className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+              <div className="mb-4 flex items-center gap-1 text-[#ef2b37]">
+                {Array.from({ length: 5 }).map((_, idx) => (
+                  <Star key={idx} size={16} fill="currentColor" />
+                ))}
+              </div>
+              <p className="text-base leading-relaxed text-white/80">
+                We went with a metallic design in the basement and the detail is
+                unreal. They helped us choose colors, sent progress updates, and
+                delivered exactly what we discussed in the consultation.
+              </p>
+              <p className="mt-5 font-display text-sm uppercase tracking-[0.18em] text-white/60">
+                Andrew & Beth K. | Basement Epoxy | Franklin
+              </p>
+            </article>
+          </div>
         </section>
 
         <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 md:px-10">
@@ -584,15 +1081,44 @@ function App() {
               </a>
 
               <a
-                href={facebookUrl}
-                target="_blank"
-                rel="noreferrer"
+                href="/contact"
                 className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-8 py-3 font-display text-sm uppercase tracking-[0.2em] text-white transition hover:bg-white/20"
               >
-                <MessageCircle size={17} />
-                Facebook Page
+                <ArrowRight size={17} />
+                Contact Us
               </a>
             </div>
+          </div>
+        </section>
+
+        <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 md:px-10 md:pb-20">
+          <div className="mb-8">
+            <p className="font-display text-sm uppercase tracking-[0.2em] text-[#ef2b37]">
+              FAQ
+            </p>
+            <h2 className="mt-3 font-display text-4xl uppercase leading-[0.9] text-white md:text-5xl">
+              Frequently Asked Questions
+            </h2>
+            <p className="mt-3 max-w-3xl text-base text-white/65 md:text-lg">
+              Quick answers to the most common questions before you start your flooring project.
+            </p>
+          </div>
+
+          <div className="grid gap-3">
+            {faqs.map((item) => (
+              <details
+                key={item.question}
+                className="group rounded-2xl border border-white/10 bg-white/[0.03] p-4"
+              >
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-display text-xl uppercase tracking-[0.08em] text-white marker:content-none md:text-2xl">
+                  <span>{item.question}</span>
+                  <span className="text-[#ef2b37] transition group-open:rotate-45">+</span>
+                </summary>
+                <p className="mt-3 pr-8 text-base leading-relaxed text-white/75">
+                  {item.answer}
+                </p>
+              </details>
+            ))}
           </div>
         </section>
       </main>
