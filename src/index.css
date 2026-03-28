@@ -26,6 +26,7 @@ body {
   margin: 0;
   font-family: 'Barlow Condensed', sans-serif;
   background:
+    linear-gradient(180deg, #000 0%, #000 18%, rgba(0, 0, 0, 0.88) 32%, rgba(0, 0, 0, 0) 58%),
     radial-gradient(circle at 12% 10%, rgba(239, 43, 55, 0.24), transparent 34%),
     radial-gradient(circle at 88% 18%, rgba(46, 92, 148, 0.22), transparent 34%),
     radial-gradient(circle at 74% 86%, rgba(180, 188, 202, 0.16), transparent 40%),
@@ -45,7 +46,7 @@ body {
       transparent 9px,
       transparent 30px
     ),
-    linear-gradient(145deg, #11151f 0%, #17101a 34%, #0e1320 68%, #0f171f 100%);
+    linear-gradient(145deg, #000 0%, #000 14%, #11151f 34%, #17101a 56%, #0e1320 78%, #0f171f 100%);
   color: #edf1f7;
   background-attachment: fixed;
   text-rendering: optimizeLegibility;
