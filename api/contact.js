@@ -102,7 +102,7 @@ export default async function handler(req, res) {
 
     const data = await resend.emails.send({
       from: "Royalty Resin Website <website@royaltyresin270.com>",
-      to: ["leonardoserrate9@gmail.com"],
+      to: ["royaltyresin270@gmail.com"],
       replyTo: email.trim(),
       subject,
       html,

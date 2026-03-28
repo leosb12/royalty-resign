@@ -1198,12 +1198,7 @@ function App() {
       <GlobalHeader facebookUrl={facebookUrl} pathname={normalizedPathname} />
 
       <main>
-        <motion.section
-          className="relative isolate overflow-hidden"
-          initial={{ opacity: 0, scale: 1.01 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
-        >
+        <section className="relative isolate overflow-hidden">
           <div className="relative aspect-[16/9] min-h-[360px] w-full sm:min-h-[420px] md:aspect-auto md:h-[100svh]">
             {banners.map((banner, index) => (
               <img
@@ -1226,68 +1221,39 @@ function App() {
 
             <div className="absolute inset-0 flex items-end md:items-center">
               <div className="mx-auto flex h-full w-full max-w-7xl items-end md:items-center px-4 pb-8 pt-24 sm:px-6 sm:pb-10 md:px-10 md:pb-12 md:pt-24">
-                <motion.div
-                  className="max-w-[290px] sm:max-w-xl md:max-w-3xl"
-                  initial={{ opacity: 0, y: 24 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
-                >
-                  <motion.p
-                    className="font-display text-[10px] uppercase tracking-[0.3em] text-[#ef2b37] sm:text-xs md:text-sm"
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.45, delay: 0.24 }}
-                  >
+                <div className="max-w-[290px] sm:max-w-xl md:max-w-3xl">
+                  <p className="font-display text-[10px] uppercase tracking-[0.3em] text-[#ef2b37] sm:text-xs md:text-sm">
                     Premium epoxy and resin floors
-                  </motion.p>
+                  </p>
 
-                  <motion.h1
-                    className="mt-2 font-display text-[2rem] uppercase leading-[0.9] text-white sm:text-5xl md:mt-4 md:text-6xl lg:text-7xl"
-                    initial={{ opacity: 0, y: 16 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.52, delay: 0.3 }}
-                  >
+                  <h1 className="mt-2 font-display text-[2rem] uppercase leading-[0.9] text-white sm:text-5xl md:mt-4 md:text-6xl lg:text-7xl">
                     {banners[activeBanner].title}
-                  </motion.h1>
+                  </h1>
 
-                  <motion.p
-                    className="mt-3 max-w-2xl text-sm leading-relaxed text-white/85 sm:text-base md:mt-4 md:text-xl"
-                    initial={{ opacity: 0, y: 14 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.38 }}
-                  >
+                  <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/85 sm:text-base md:mt-4 md:text-xl">
                     {banners[activeBanner].subtitle}
-                  </motion.p>
+                  </p>
 
-                  <motion.div
-                    className="mt-4 flex flex-wrap gap-2.5 sm:mt-5 sm:gap-3 md:mt-7"
-                    initial={{ opacity: 0, y: 14 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.46 }}
-                  >
-                    <motion.a
+                  <div className="mt-4 flex flex-wrap gap-2.5 sm:mt-5 sm:gap-3 md:mt-7">
+                    <a
                       href={`tel:${phone}`}
                       className="inline-flex items-center justify-center gap-2 rounded-full bg-[#ef2b37] px-4 py-2.5 font-display text-[10px] uppercase tracking-[0.2em] text-white transition hover:bg-[#c41722] sm:px-5 sm:text-xs md:px-6 md:py-3.5 md:text-sm"
-                      whileHover={{ y: -2, scale: 1.03 }}
-                      whileTap={{ scale: 0.97 }}
                     >
                       <PhoneCall size={15} />
                       Call for Free Estimate
-                    </motion.a>
+                    </a>
 
-                    <motion.a
+                    <a
                       href={facebookUrl}
                       target="_blank"
                       rel="noreferrer"
                       className="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-2.5 font-display text-[10px] uppercase tracking-[0.2em] text-white transition hover:bg-white/20 sm:px-5 sm:text-xs md:px-6 md:py-3.5 md:text-sm"
-                      whileHover={{ y: -2, scale: 1.03 }}
-                      whileTap={{ scale: 0.97 }}
                     >
                       Message on Facebook
                       <ArrowRight size={14} />
-                    </motion.a>
-                  </motion.div>
-                </motion.div>
+                    </a>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -1329,9 +1295,9 @@ function App() {
               </>
             )}
           </div>
-        </motion.section>
+        </section>
 
-        <motion.section {...sectionMotion} className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:px-10 md:py-20 lg:grid-cols-[1.08fr_0.92fr]">
+        <section className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:px-10 md:py-20 lg:grid-cols-[1.08fr_0.92fr]">
           <div>
             <p className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 font-display text-xs uppercase tracking-[0.24em] text-white/80">
               <MapPin size={14} className="text-[#ef2b37]" />
@@ -1420,17 +1386,16 @@ function App() {
               </article>
             </div>
           </div>
-        </motion.section>
+        </section>
 
-        <motion.section {...sectionMotion} className="mx-auto grid max-w-7xl gap-6 px-4 pb-14 sm:px-6 md:grid-cols-3 md:px-10 md:pb-20">
+        <section className="mx-auto grid max-w-7xl gap-6 px-4 pb-14 sm:px-6 md:grid-cols-3 md:px-10 md:pb-20">
           {services.map((service) => {
             const Icon = service.icon
 
             return (
-              <motion.article
+              <article
                 key={service.title}
                 className="relative overflow-visible rounded-3xl border border-white/10 bg-white/[0.03] p-6 transition hover:-translate-y-1"
-                {...cardMotion}
               >
                 <svg
                   className="service-image-worm-svg"
@@ -1480,12 +1445,12 @@ function App() {
                 <p className="mt-4 text-base leading-relaxed text-white/70">
                   {service.description}
                 </p>
-              </motion.article>
+              </article>
             )
           })}
-        </motion.section>
+        </section>
 
-        <motion.section {...sectionMotion} className="mx-auto grid max-w-7xl gap-8 px-4 pb-14 sm:px-6 md:px-10 md:pb-20 lg:grid-cols-[1.1fr_0.9fr]">
+        <section className="mx-auto grid max-w-7xl gap-8 px-4 pb-14 sm:px-6 md:px-10 md:pb-20 lg:grid-cols-[1.1fr_0.9fr]">
           <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-8 md:p-10">
             <p className="font-display text-sm uppercase tracking-[0.2em] text-[#ef2b37]">
               Why Royalty Resin
@@ -1503,19 +1468,18 @@ function App() {
 
           <ul className="grid gap-3">
             {highlights.map((item) => (
-              <motion.li
+              <li
                 key={item}
                 className="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4"
-                {...cardMotion}
               >
                 <CheckCircle2 className="mt-0.5 shrink-0 text-[#ef2b37]" size={18} />
                 <span className="text-base text-white/80">{item}</span>
-              </motion.li>
+              </li>
             ))}
           </ul>
-        </motion.section>
+        </section>
 
-        <motion.section {...sectionMotion} className="mx-auto max-w-7xl px-4 pb-14 sm:px-6 md:px-10 md:pb-20">
+        <section className="mx-auto max-w-7xl px-4 pb-14 sm:px-6 md:px-10 md:pb-20">
           <div className="mb-8">
             <p className="font-display text-sm uppercase tracking-[0.2em] text-[#ef2b37]">
               Installation Flow
@@ -1525,10 +1489,7 @@ function App() {
             </h2>
           </div>
 
-          <motion.div
-            className="mb-6 overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] p-2 md:hidden"
-            {...cardMotion}
-          >
+          <div className="mb-6 overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] p-2 md:hidden">
             <div className="relative overflow-hidden rounded-2xl">
               <img
                 src="/garage-flake-epoxy-finish-bowling-green-ky.jpg"
@@ -1541,17 +1502,16 @@ function App() {
                 Precision in every layer
               </p>
             </div>
-          </motion.div>
+          </div>
 
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
             {process.map((step, index) => {
               const Icon = step.icon
 
               return (
-                <motion.article
+                <article
                   key={step.title}
                   className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] p-6"
-                  {...cardMotion}
                 >
                   <div className="absolute -right-12 -top-12 h-32 w-32 rounded-full bg-[#ef2b37]/10 blur-3xl" />
                   <p className="font-display text-sm uppercase tracking-[0.2em] text-white/45">
@@ -1568,13 +1528,13 @@ function App() {
                   <p className="mt-3 text-base leading-relaxed text-white/70">
                     {step.description}
                   </p>
-                </motion.article>
+                </article>
               )
             })}
           </div>
-        </motion.section>
+        </section>
 
-        <motion.section {...sectionMotion} className="mx-auto max-w-7xl px-4 pb-14 sm:px-6 md:px-10 md:pb-20">
+        <section className="mx-auto max-w-7xl px-4 pb-14 sm:px-6 md:px-10 md:pb-20">
           <div className="mb-8">
             <p className="font-display text-sm uppercase tracking-[0.2em] text-[#ef2b37]">
               Featured Looks
@@ -1586,10 +1546,9 @@ function App() {
 
           <div className="grid gap-6 md:grid-cols-3">
             {gallery.map((item) => (
-              <motion.article
+              <article
                 key={item.title}
                 className="group relative overflow-hidden rounded-3xl border border-white/10"
-                {...cardMotion}
               >
                 <img
                   src={item.image}
@@ -1606,14 +1565,13 @@ function App() {
                     {item.tag}
                   </p>
                 </div>
-              </motion.article>
+              </article>
             ))}
           </div>
-        </motion.section>
+        </section>
 
-        <motion.section
+        <section
           ref={timeLapseSectionRef}
-          {...sectionMotion}
           className="mx-auto max-w-7xl px-4 pb-14 sm:px-6 md:px-10 md:pb-20"
         >
           <div className="grid items-center gap-8 lg:grid-cols-[1fr_auto] lg:gap-10">
@@ -1692,9 +1650,9 @@ function App() {
               </div>
             </div>
           </div>
-        </motion.section>
+        </section>
 
-        <motion.section {...sectionMotion} className="mx-auto max-w-7xl px-4 pb-14 sm:px-6 md:px-10 md:pb-20">
+        <section className="mx-auto max-w-7xl px-4 pb-14 sm:px-6 md:px-10 md:pb-20">
           <div className="mb-8">
             <p className="font-display text-sm uppercase tracking-[0.2em] text-[#ef2b37]">
               Client Recommendations
@@ -1709,7 +1667,7 @@ function App() {
           </div>
 
           <div className="grid gap-6 md:grid-cols-3">
-            <motion.article className="rounded-2xl border border-white/10 bg-white/[0.03] p-5" {...cardMotion}>
+            <article className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
               <div className="mb-4 flex items-center gap-1 text-[#ef2b37]">
                 {Array.from({ length: 5 }).map((_, idx) => (
                   <Star key={idx} size={16} fill="currentColor" />
@@ -1723,9 +1681,9 @@ function App() {
               <p className="mt-5 font-display text-sm uppercase tracking-[0.18em] text-white/60">
                 Jason M. | 2-Car Garage | Bowling Green
               </p>
-            </motion.article>
+            </article>
 
-            <motion.article className="rounded-2xl border border-white/10 bg-white/[0.03] p-5" {...cardMotion}>
+            <article className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
               <div className="mb-4 flex items-center gap-1 text-[#ef2b37]">
                 {Array.from({ length: 5 }).map((_, idx) => (
                   <Star key={idx} size={16} fill="currentColor" />
@@ -1739,9 +1697,9 @@ function App() {
               <p className="mt-5 font-display text-sm uppercase tracking-[0.18em] text-white/60">
                 Maria L. | Commercial Space | Scottsville
               </p>
-            </motion.article>
+            </article>
 
-            <motion.article className="rounded-2xl border border-white/10 bg-white/[0.03] p-5" {...cardMotion}>
+            <article className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
               <div className="mb-4 flex items-center gap-1 text-[#ef2b37]">
                 {Array.from({ length: 5 }).map((_, idx) => (
                   <Star key={idx} size={16} fill="currentColor" />
@@ -1755,11 +1713,11 @@ function App() {
               <p className="mt-5 font-display text-sm uppercase tracking-[0.18em] text-white/60">
                 Andrew & Beth K. | Basement Epoxy | Franklin
               </p>
-            </motion.article>
+            </article>
           </div>
-        </motion.section>
+        </section>
 
-        <motion.section {...sectionMotion} className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 md:px-10">
+        <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 md:px-10">
           <div className="rounded-3xl border border-[#ef2b37]/30 bg-gradient-to-r from-white/[0.04] to-[#ef2b37]/[0.08] p-8 text-center md:p-12">
             <p className="font-display text-sm uppercase tracking-[0.24em] text-[#ef2b37]">
               Start Your Project
@@ -1775,32 +1733,27 @@ function App() {
             </p>
 
             <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <motion.a
+              <a
                 href={`tel:${phone}`}
                 className="inline-flex items-center justify-center gap-2 rounded-full bg-[#ef2b37] px-8 py-3 font-display text-sm uppercase tracking-[0.2em] text-white transition hover:bg-[#c41722]"
-                whileHover={{ y: -2, scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
               >
                 <PhoneCall size={17} />
                 {phone}
-              </motion.a>
+              </a>
 
-              <motion.a
+              <a
                 href="/contact"
                 className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-8 py-3 font-display text-sm uppercase tracking-[0.2em] text-white transition hover:bg-white/20"
-                whileHover={{ y: -2, scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
               >
                 <ArrowRight size={17} />
                 Contact Us
-              </motion.a>
+              </a>
             </div>
           </div>
-        </motion.section>
+        </section>
 
-        <motion.section
+        <section
           id="faq"
-          {...sectionMotion}
           className="mx-auto max-w-7xl scroll-mt-28 px-4 pb-16 sm:px-6 md:px-10 md:pb-20"
         >
           <div className="mb-8">
@@ -1817,10 +1770,9 @@ function App() {
 
           <div className="grid gap-3">
             {faqs.map((item) => (
-              <motion.details
+              <details
                 key={item.question}
                 className="group rounded-2xl border border-white/10 bg-white/[0.03] p-4"
-                {...cardMotion}
               >
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-display text-xl uppercase tracking-[0.08em] text-white marker:content-none md:text-2xl">
                   <span>{item.question}</span>
@@ -1829,19 +1781,13 @@ function App() {
                 <p className="mt-3 pr-8 text-base leading-relaxed text-white/75">
                   {item.answer}
                 </p>
-              </motion.details>
+              </details>
             ))}
           </div>
-        </motion.section>
+        </section>
       </main>
 
-      <motion.footer
-        className="border-t border-white/10"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.7 }}
-        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      >
+      <footer className="border-t border-white/10">
         <div className="mx-auto flex w-full max-w-7xl flex-col gap-3 px-4 py-10 text-center sm:px-6 md:px-10 md:text-left">
           <p className="font-display text-3xl uppercase text-white md:text-4xl">
             Royalty Resin
@@ -1853,7 +1799,7 @@ function App() {
             Serving Bowling Green, KY and surrounding areas.
           </p>
         </div>
-      </motion.footer>
+      </footer>
     </div>
   )
 }
