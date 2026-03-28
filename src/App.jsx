@@ -34,6 +34,24 @@ const cardMotion = {
   transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] },
 }
 
+const mobileCarouselVariants = {
+  enter: (direction) => ({
+    x: direction > 0 ? 70 : -70,
+    opacity: 0,
+    scale: 0.985,
+  }),
+  center: {
+    x: 0,
+    opacity: 1,
+    scale: 1,
+  },
+  exit: (direction) => ({
+    x: direction > 0 ? -70 : 70,
+    opacity: 0,
+    scale: 0.985,
+  }),
+}
+
 function GlobalHeader({ facebookUrl, pathname }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const [currentHash, setCurrentHash] = useState(window.location.hash || '')
@@ -1109,12 +1127,50 @@ function App() {
     },
   ]
 
+  const testimonials = [
+    {
+      quote:
+        'The crew showed up on schedule, prepped every crack correctly, and finished our garage in two days. Cleanup was excellent and the floor still looks brand new months later.',
+      author: 'Jason M. | 2-Car Garage | Bowling Green',
+    },
+    {
+      quote:
+        'We needed a durable floor for our small retail backroom and they nailed it. They explained cure time clearly, stayed on timeline, and the finish handles carts and daily traffic perfectly.',
+      author: 'Maria L. | Commercial Space | Scottsville',
+    },
+    {
+      quote:
+        'We went with a metallic design in the basement and the detail is unreal. They helped us choose colors, sent progress updates, and delivered exactly what we discussed in the consultation.',
+      author: 'Andrew & Beth K. | Basement Epoxy | Franklin',
+    },
+  ]
+
   const [activeBanner, setActiveBanner] = useState(0)
+  const [activeProcessStep, setActiveProcessStep] = useState(0)
+  const [processDirection, setProcessDirection] = useState(1)
+  const [activeTestimonial, setActiveTestimonial] = useState(0)
+  const [testimonialDirection, setTestimonialDirection] = useState(1)
   const [autoplayPaused, setAutoplayPaused] = useState(false)
   const [playTimeLapse, setPlayTimeLapse] = useState(false)
   const resumeAutoplayTimeoutRef = useRef(null)
   const timeLapseSectionRef = useRef(null)
   const timeLapseVideoRef = useRef(null)
+
+  const moveProcessStep = (direction) => {
+    setProcessDirection(direction)
+    setActiveProcessStep((current) => {
+      const next = current + direction
+      return (next + process.length) % process.length
+    })
+  }
+
+  const moveTestimonial = (direction) => {
+    setTestimonialDirection(direction)
+    setActiveTestimonial((current) => {
+      const next = current + direction
+      return (next + testimonials.length) % testimonials.length
+    })
+  }
 
   const pauseAutoplayTemporarily = () => {
     setAutoplayPaused(true)
@@ -1504,7 +1560,91 @@ function App() {
             </div>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+          <div className="mb-6 md:hidden">
+            <div className="relative overflow-hidden rounded-3xl">
+              <AnimatePresence initial={false} custom={processDirection} mode="wait">
+                <motion.article
+                  key={process[activeProcessStep].title}
+                  className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] p-6"
+                  custom={processDirection}
+                  variants={mobileCarouselVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={{ duration: 0.28, ease: 'easeOut' }}
+                  drag="x"
+                  dragConstraints={{ left: 0, right: 0 }}
+                  dragElastic={0.45}
+                  onDragEnd={(_, info) => {
+                    if (info.offset.x < -45) {
+                      moveProcessStep(1)
+                    } else if (info.offset.x > 45) {
+                      moveProcessStep(-1)
+                    }
+                  }}
+                >
+                  <div className="absolute -right-12 -top-12 h-32 w-32 rounded-full bg-[#ef2b37]/10 blur-3xl" />
+                  <p className="font-display text-sm uppercase tracking-[0.2em] text-white/45">
+                    Step {activeProcessStep + 1}
+                  </p>
+
+                  <div className="mt-3 flex items-center gap-3">
+                    {(() => {
+                      const Icon = process[activeProcessStep].icon
+                      return <Icon className="text-[#ef2b37]" size={24} />
+                    })()}
+                    <h3 className="font-display text-2xl uppercase text-white">
+                      {process[activeProcessStep].title}
+                    </h3>
+                  </div>
+
+                  <p className="mt-3 text-base leading-relaxed text-white/70">
+                    {process[activeProcessStep].description}
+                  </p>
+
+                  <button
+                    type="button"
+                    onClick={() => moveProcessStep(-1)}
+                    aria-label="Previous installation step"
+                    className="absolute left-3 top-1/2 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/45 text-white transition hover:bg-black/60"
+                  >
+                    <ChevronLeft size={16} />
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => moveProcessStep(1)}
+                    aria-label="Next installation step"
+                    className="absolute right-3 top-1/2 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/45 text-white transition hover:bg-black/60"
+                  >
+                    <ChevronRight size={16} />
+                  </button>
+                </motion.article>
+              </AnimatePresence>
+            </div>
+
+            <div className="mt-3 flex items-center justify-center gap-2">
+              {process.map((step, index) => (
+                <button
+                  key={step.title}
+                  type="button"
+                  onClick={() => {
+                    if (index === activeProcessStep) return
+                    moveProcessStep(index > activeProcessStep ? 1 : -1)
+                    setActiveProcessStep(index)
+                  }}
+                  aria-label={`Go to step ${index + 1}`}
+                  className={`h-2.5 rounded-full transition-all ${
+                    activeProcessStep === index
+                      ? 'w-7 bg-[#ef2b37]'
+                      : 'w-2.5 bg-white/45 hover:bg-white/70'
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+
+          <div className="hidden gap-6 md:grid md:grid-cols-2 xl:grid-cols-4">
             {process.map((step, index) => {
               const Icon = step.icon
 
@@ -1666,54 +1806,99 @@ function App() {
             </p>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-3">
-            <article className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-              <div className="mb-4 flex items-center gap-1 text-[#ef2b37]">
-                {Array.from({ length: 5 }).map((_, idx) => (
-                  <Star key={idx} size={16} fill="currentColor" />
-                ))}
-              </div>
-              <p className="text-base leading-relaxed text-white/80">
-                The crew showed up on schedule, prepped every crack correctly,
-                and finished our garage in two days. Cleanup was excellent and
-                the floor still looks brand new months later.
-              </p>
-              <p className="mt-5 font-display text-sm uppercase tracking-[0.18em] text-white/60">
-                Jason M. | 2-Car Garage | Bowling Green
-              </p>
-            </article>
+          <div className="md:hidden">
+            <div className="relative overflow-hidden rounded-2xl">
+              <AnimatePresence initial={false} custom={testimonialDirection} mode="wait">
+                <motion.article
+                  key={testimonials[activeTestimonial].author}
+                  className="rounded-2xl border border-white/10 bg-white/[0.03] p-5"
+                  custom={testimonialDirection}
+                  variants={mobileCarouselVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={{ duration: 0.28, ease: 'easeOut' }}
+                  drag="x"
+                  dragConstraints={{ left: 0, right: 0 }}
+                  dragElastic={0.45}
+                  onDragEnd={(_, info) => {
+                    if (info.offset.x < -45) {
+                      moveTestimonial(1)
+                    } else if (info.offset.x > 45) {
+                      moveTestimonial(-1)
+                    }
+                  }}
+                >
+                  <div className="mb-4 flex items-center gap-1 text-[#ef2b37]">
+                    {Array.from({ length: 5 }).map((_, idx) => (
+                      <Star key={idx} size={16} fill="currentColor" />
+                    ))}
+                  </div>
+                  <p className="text-base leading-relaxed text-white/80">
+                    {testimonials[activeTestimonial].quote}
+                  </p>
+                  <p className="mt-5 font-display text-sm uppercase tracking-[0.18em] text-white/60">
+                    {testimonials[activeTestimonial].author}
+                  </p>
 
-            <article className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-              <div className="mb-4 flex items-center gap-1 text-[#ef2b37]">
-                {Array.from({ length: 5 }).map((_, idx) => (
-                  <Star key={idx} size={16} fill="currentColor" />
-                ))}
-              </div>
-              <p className="text-base leading-relaxed text-white/80">
-                We needed a durable floor for our small retail backroom and they
-                nailed it. They explained cure time clearly, stayed on timeline,
-                and the finish handles carts and daily traffic perfectly.
-              </p>
-              <p className="mt-5 font-display text-sm uppercase tracking-[0.18em] text-white/60">
-                Maria L. | Commercial Space | Scottsville
-              </p>
-            </article>
+                  <button
+                    type="button"
+                    onClick={() => moveTestimonial(-1)}
+                    aria-label="Previous recommendation"
+                    className="absolute left-3 top-1/2 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/45 text-white transition hover:bg-black/60"
+                  >
+                    <ChevronLeft size={16} />
+                  </button>
 
-            <article className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-              <div className="mb-4 flex items-center gap-1 text-[#ef2b37]">
-                {Array.from({ length: 5 }).map((_, idx) => (
-                  <Star key={idx} size={16} fill="currentColor" />
-                ))}
-              </div>
-              <p className="text-base leading-relaxed text-white/80">
-                We went with a metallic design in the basement and the detail is
-                unreal. They helped us choose colors, sent progress updates, and
-                delivered exactly what we discussed in the consultation.
-              </p>
-              <p className="mt-5 font-display text-sm uppercase tracking-[0.18em] text-white/60">
-                Andrew & Beth K. | Basement Epoxy | Franklin
-              </p>
-            </article>
+                  <button
+                    type="button"
+                    onClick={() => moveTestimonial(1)}
+                    aria-label="Next recommendation"
+                    className="absolute right-3 top-1/2 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/45 text-white transition hover:bg-black/60"
+                  >
+                    <ChevronRight size={16} />
+                  </button>
+                </motion.article>
+              </AnimatePresence>
+            </div>
+
+            <div className="mt-4 flex items-center justify-center gap-2">
+              {testimonials.map((item, index) => (
+                <button
+                  key={item.author}
+                  type="button"
+                  onClick={() => {
+                    if (index === activeTestimonial) return
+                    moveTestimonial(index > activeTestimonial ? 1 : -1)
+                    setActiveTestimonial(index)
+                  }}
+                  aria-label={`Go to recommendation ${index + 1}`}
+                  className={`h-2.5 rounded-full transition-all ${
+                    activeTestimonial === index
+                      ? 'w-7 bg-[#ef2b37]'
+                      : 'w-2.5 bg-white/45 hover:bg-white/70'
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+
+          <div className="hidden gap-6 md:grid md:grid-cols-3">
+            {testimonials.map((item) => (
+              <article key={item.author} className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+                <div className="mb-4 flex items-center gap-1 text-[#ef2b37]">
+                  {Array.from({ length: 5 }).map((_, idx) => (
+                    <Star key={idx} size={16} fill="currentColor" />
+                  ))}
+                </div>
+                <p className="text-base leading-relaxed text-white/80">
+                  {item.quote}
+                </p>
+                <p className="mt-5 font-display text-sm uppercase tracking-[0.18em] text-white/60">
+                  {item.author}
+                </p>
+              </article>
+            ))}
           </div>
         </section>
 
