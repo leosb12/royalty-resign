@@ -205,34 +205,77 @@ function ContactPage({ phone, facebookUrl }) {
 }
 
 function WorksPage({ phone }) {
-  const portfolioItems = [
+  const reelProjects = [
     {
-      title: 'Garage Flake Transformation',
-      image: '/garageresin.jpg',
-      category: 'Garage System',
+      title: 'Basement Revival Build',
+      category: 'Basement Transformation',
+      video: '/projects/Video%20project%201basement.mp4',
       description:
-        'Full grind, crack repair, and multi-layer flake system finished with a UV-stable topcoat.',
+        'A full basement upgrade with moisture-managed prep and a seamless resin finish built for clean daily performance.',
+      highlights: ['Basement Upgrade', 'Moisture-Aware Prep'],
+      icon: Layers3,
     },
     {
-      title: 'Metallic Flow Statement Floor',
-      image: '/floor.jpg',
-      category: 'Custom Metallic',
+      title: '700 SQFT Garage Flake System',
+      category: 'Garage Flake Makeover',
+      video: '/projects/Video%20Project%202.mp4',
       description:
-        'A high-gloss metallic composition with movement and depth tailored to the room lighting.',
+        'This 700 sq ft garage moved from plain slab to a premium flake blend, executed with strict prep and precision topcoating.',
+      highlights: ['Flake Blend Finish', 'Prep-to-Perfection'],
+      icon: Hammer,
     },
     {
-      title: 'Commercial Traffic Coating',
-      image: '/daily.jpg',
-      category: 'Commercial',
+      title: 'Royalty Signature Finish',
+      category: 'Royalty Signature Coating',
+      video: '/projects/Video%20Project%203.mp4',
       description:
-        'Impact and abrasion-resistant system designed for frequent daily traffic and easy maintenance.',
+        'Your floor deserves the Royalty treatment: elevated style, durable protection, and a finish designed to stand out long-term.',
+      highlights: ['Luxury Look', 'High-Traffic Ready'],
+      icon: ShieldCheck,
+    },
+  ]
+
+  const [activeReelIndex, setActiveReelIndex] = useState(0)
+  const reelVideoRefs = useRef([])
+
+  const handleReelEnded = (index) => {
+    const nextIndex = (index + 1) % reelProjects.length
+    setActiveReelIndex(nextIndex)
+  }
+
+  useEffect(() => {
+    const currentVideo = reelVideoRefs.current[activeReelIndex]
+    if (!currentVideo) {
+      return
+    }
+
+    reelVideoRefs.current.forEach((video, index) => {
+      if (!video || index === activeReelIndex) {
+        return
+      }
+
+      video.pause()
+    })
+
+    currentVideo.currentTime = 0
+    const playAttempt = currentVideo.play()
+    if (playAttempt && typeof playAttempt.catch === 'function') {
+      playAttempt.catch(() => {})
+    }
+  }, [activeReelIndex, reelProjects.length])
+
+  const trustPills = [
+    {
+      label: 'Precision Prep Standards',
+      icon: CheckCircle2,
     },
     {
-      title: 'Residential Garage Detail',
-      image: '/garage.jpg',
-      category: 'Residential',
-      description:
-        'Clean edge work and uniform broadcast texture with a premium finished shine.',
+      label: 'Premium Materials',
+      icon: Droplets,
+    },
+    {
+      label: 'Bowling Green, KY',
+      icon: MapPin,
     },
   ]
 
@@ -247,16 +290,16 @@ function WorksPage({ phone }) {
           Back to Home
         </a>
 
-        <section className="mt-6 rounded-3xl border border-white/10 bg-white/[0.03] p-6 md:p-10">
+        <section className="reveal-up mt-6 rounded-3xl border border-white/10 bg-gradient-to-r from-white/[0.04] via-white/[0.02] to-[#ef2b37]/[0.08] p-6 md:p-10">
           <p className="font-display text-xs uppercase tracking-[0.24em] text-[#ef2b37]">
-            Works Portfolio
+            Reel Projects
           </p>
           <h1 className="mt-4 font-display text-5xl uppercase leading-[0.9] text-white md:text-6xl">
-            Recent Floors We Built
+            High-Impact Floor Transformations
           </h1>
           <p className="mt-4 max-w-3xl text-base leading-relaxed text-white/70 md:text-lg">
-            Explore a selection of our recent resin and epoxy installations across
-            garages, homes, and commercial environments.
+            A curated showcase of real Royalty Resin installs. Vertical reels,
+            real jobsite execution, and finish quality you can see in motion.
           </p>
 
           <div className="mt-6 flex flex-wrap gap-3">
@@ -275,33 +318,186 @@ function WorksPage({ phone }) {
               <ArrowRight size={15} />
             </a>
           </div>
+
+          <div className="mt-6 grid gap-3 sm:grid-cols-3">
+            {trustPills.map((pill) => {
+              const Icon = pill.icon
+
+              return (
+                <div
+                  key={pill.label}
+                  className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-black/25 px-3 py-2"
+                >
+                  <Icon size={15} className="text-[#ef2b37]" />
+                  <span className="font-display text-xs uppercase tracking-[0.12em] text-white/80">
+                    {pill.label}
+                  </span>
+                </div>
+              )
+            })}
+          </div>
         </section>
 
-        <section className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          {portfolioItems.map((item) => (
-            <article
-              key={item.title}
-              className="group overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03]"
-            >
-              <img
-                src={item.image}
-                alt={item.title}
-                className="h-64 w-full object-cover transition duration-500 group-hover:scale-105"
-                loading="lazy"
-              />
-              <div className="p-5">
-                <p className="font-display text-xs uppercase tracking-[0.2em] text-[#ef2b37]">
-                  {item.category}
-                </p>
-                <h2 className="mt-2 font-display text-2xl uppercase leading-tight text-white">
-                  {item.title}
-                </h2>
-                <p className="mt-3 text-sm leading-relaxed text-white/70">
-                  {item.description}
-                </p>
+        <section className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          {reelProjects.map((project, index) => {
+            const Icon = project.icon
+            const revealClass =
+              index === 0
+                ? 'reveal-up'
+                : index === 1
+                  ? 'reveal-up-delay-1'
+                  : 'reveal-up-delay-2'
+
+            return (
+              <article
+                key={project.title}
+                className={`works-reel-card group mx-auto w-full max-w-[280px] p-4 sm:max-w-[305px] md:max-w-none ${revealClass}`}
+              >
+                <div
+                  className="works-reel-media relative mx-auto h-[46svh] min-h-[285px] max-h-[400px] w-auto overflow-hidden rounded-2xl border border-white/10 bg-black sm:h-[50svh] sm:max-h-[440px] md:h-[52svh] md:min-h-[320px] md:max-h-[500px]"
+                  style={{ aspectRatio: '9 / 16' }}
+                >
+                  <video
+                    src={project.video}
+                    className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-[1.03]"
+                    ref={(element) => {
+                      reelVideoRefs.current[index] = element
+                    }}
+                    onPlay={() => {
+                      if (activeReelIndex !== index) {
+                        setActiveReelIndex(index)
+                      }
+                    }}
+                    onEnded={() => handleReelEnded(index)}
+                    muted
+                    loop={false}
+                    controls
+                    playsInline
+                    autoPlay={index === 0}
+                    preload="metadata"
+                  />
+
+                  <div className="absolute inset-x-3 top-3 flex items-center justify-between rounded-xl border border-white/15 bg-black/45 px-3 py-2 backdrop-blur-sm">
+                    <span className="font-display text-[11px] uppercase tracking-[0.2em] text-white/85">
+                      {project.category}
+                    </span>
+                    <Icon size={14} className="text-[#ef2b37]" />
+                  </div>
+                </div>
+
+                <div className="mt-4">
+                  <h2 className="font-display text-3xl uppercase leading-[0.94] text-white">
+                    {project.title}
+                  </h2>
+                  <p className="mt-3 text-sm leading-relaxed text-white/72 md:text-base">
+                    {project.description}
+                  </p>
+
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {project.highlights.map((highlight) => (
+                      <span
+                        key={highlight}
+                        className="rounded-full border border-[#ef2b37]/30 bg-[#ef2b37]/10 px-3 py-1 font-display text-[10px] uppercase tracking-[0.15em] text-white/85"
+                      >
+                        {highlight}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </article>
+            )
+          })}
+        </section>
+
+        <section className="reveal-up-delay-3 mt-8 rounded-3xl border border-white/10 bg-white/[0.03] p-5 sm:p-6 md:p-8">
+          <div className="before-after-heading-wrap rounded-2xl border border-white/10 bg-black/20 p-4 sm:p-5">
+            <p className="font-display text-xs uppercase tracking-[0.22em] text-[#ef2b37]">
+              Before and After
+            </p>
+            <h2 className="mt-3 font-display text-4xl uppercase leading-[0.9] text-white md:text-5xl">
+              From Plain Concrete to Royalty Metallic
+            </h2>
+            <p className="mt-3 max-w-4xl text-base leading-relaxed text-white/72 md:text-lg">
+              We transformed this garage from plain concrete into a custom metallic floor that reflects the power and style of this supercar. When the vehicle is legendary, the floor beneath it should be equally iconic.
+            </p>
+
+            <div className="mt-4 flex flex-wrap gap-2">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[11px] uppercase tracking-[0.14em] text-white/80">
+                <PaintBucket size={13} className="text-[#ef2b37]" />
+                Custom Metallic System
+              </span>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[11px] uppercase tracking-[0.14em] text-white/80">
+                <ShieldCheck size={13} className="text-[#ef2b37]" />
+                Built for Daily Use
+              </span>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[11px] uppercase tracking-[0.14em] text-white/80">
+                <Star size={13} className="text-[#ef2b37]" />
+                Signature Showroom Look
+              </span>
+            </div>
+          </div>
+
+          <div className="mt-6 grid items-center gap-4 md:grid-cols-[1fr_auto_1fr] md:gap-6">
+            <article className="before-after-image-card group">
+              <div className="before-after-image-wrap">
+                <img
+                  src="/before%20floor%20garage.jpg"
+                  alt="Garage floor before metallic resin installation"
+                  className="before-after-image"
+                  loading="lazy"
+                />
+                <span className="before-after-badge">Before</span>
               </div>
             </article>
-          ))}
+
+            <div className="hidden md:flex">
+              <span className="before-after-divider inline-flex h-12 w-12 items-center justify-center rounded-full border border-[#ef2b37]/45 bg-[#ef2b37]/20 text-[#ef2b37]">
+                <ArrowRight size={20} />
+              </span>
+            </div>
+
+            <article className="before-after-image-card group">
+              <div className="before-after-image-wrap">
+                <img
+                  src="/garageresin.jpg"
+                  alt="Garage floor after custom metallic resin transformation"
+                  className="before-after-image"
+                  loading="lazy"
+                />
+                <span className="before-after-badge">After</span>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section className="mt-8 rounded-3xl border border-white/10 bg-white/[0.03] p-6 md:p-8">
+          <p className="font-display text-xs uppercase tracking-[0.2em] text-[#ef2b37]">
+            Plan Your Project
+          </p>
+          <h2 className="mt-3 font-display text-4xl uppercase leading-[0.92] text-white md:text-5xl">
+            Ready for your own Royalty finish?
+          </h2>
+          <p className="mt-3 max-w-3xl text-base leading-relaxed text-white/70 md:text-lg">
+            Share your space details and we will recommend the right resin system,
+            timeline, and finish direction for your home or business.
+          </p>
+
+          <div className="mt-6 flex flex-wrap gap-3">
+            <a
+              href={`tel:${phone}`}
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-[#ef2b37] px-6 py-3 font-display text-xs uppercase tracking-[0.2em] text-white transition hover:bg-[#c41722]"
+            >
+              <PhoneCall size={15} />
+              Call {phone}
+            </a>
+            <a
+              href="/contact"
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 py-3 font-display text-xs uppercase tracking-[0.2em] text-white transition hover:bg-white/20"
+            >
+              Request a Quote
+              <ArrowRight size={15} />
+            </a>
+          </div>
         </section>
       </div>
     </div>
@@ -316,12 +512,13 @@ function App() {
   const timeLapseVideoUrl = '/timelapsework.mp4'
   const autoSlideDelay = 6500
   const manualPauseDelay = 9000
+  const normalizedPathname = window.location.pathname.replace(/\/+$/, '') || '/'
 
-  if (window.location.pathname === '/contact') {
+  if (normalizedPathname === '/contact') {
     return <ContactPage phone={phone} facebookUrl={facebookUrl} />
   }
 
-  if (window.location.pathname === '/works') {
+  if (normalizedPathname === '/works') {
     return <WorksPage phone={phone} />
   }
 
