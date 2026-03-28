@@ -1458,6 +1458,24 @@ function App() {
             </h2>
           </div>
 
+          <motion.div
+            className="mb-6 overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] p-2 md:hidden"
+            {...cardMotion}
+          >
+            <div className="relative overflow-hidden rounded-2xl">
+              <img
+                src="/garage-flake-epoxy-finish-bowling-green-ky.jpg"
+                alt="Professional epoxy installation process"
+                className="h-56 w-full object-cover"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+              <p className="absolute bottom-3 left-3 rounded-full border border-white/20 bg-black/45 px-3 py-1 font-display text-[10px] uppercase tracking-[0.16em] text-white/85">
+                Precision in every layer
+              </p>
+            </div>
+          </motion.div>
+
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
             {process.map((step, index) => {
               const Icon = step.icon
