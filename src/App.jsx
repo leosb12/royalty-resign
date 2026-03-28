@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react'
+﻿import { useEffect, useRef, useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 import {
   ArrowRight,
   Building2,
@@ -18,6 +19,20 @@ import {
   Star,
   X,
 } from 'lucide-react'
+
+const sectionMotion = {
+  initial: { opacity: 0, y: 30 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, amount: 0.2 },
+  transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
+}
+
+const cardMotion = {
+  initial: { opacity: 0, y: 22, scale: 0.985 },
+  whileInView: { opacity: 1, y: 0, scale: 1 },
+  viewport: { once: true, amount: 0.2 },
+  transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] },
+}
 
 function GlobalHeader({ facebookUrl, pathname }) {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -89,7 +104,12 @@ function GlobalHeader({ facebookUrl, pathname }) {
   ]
 
   return (
-    <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/10 bg-black/35 backdrop-blur-md">
+    <motion.header
+      className="fixed left-0 right-0 top-0 z-50 border-b border-white/10 bg-black/35 backdrop-blur-md"
+      initial={{ y: -28, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+    >
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-3 sm:px-6 md:px-10">
         <a href="/" className="shrink-0">
           <p className="font-brand text-2xl leading-none text-[#f0f3f8] md:text-3xl">
@@ -108,7 +128,7 @@ function GlobalHeader({ facebookUrl, pathname }) {
                 : pathname === item.href
 
             return (
-              <a
+              <motion.a
                 key={item.key}
                 href={item.href}
                 onClick={(event) => {
@@ -124,9 +144,11 @@ function GlobalHeader({ facebookUrl, pathname }) {
                     ? 'bg-[#ef2b37]/90 text-white'
                     : 'text-white/80 hover:bg-white/10 hover:text-white'
                 }`}
+                whileHover={{ y: -2, scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
               >
                 {item.label}
-              </a>
+              </motion.a>
             )
           })}
         </nav>
@@ -154,52 +176,64 @@ function GlobalHeader({ facebookUrl, pathname }) {
         </button>
       </div>
 
-      {menuOpen && (
-        <div className="border-t border-white/10 bg-black/75 px-4 pb-4 pt-3 backdrop-blur-md sm:px-6 lg:hidden">
-          <nav className="grid gap-2">
-            {navItems.map((item) => {
-              const isActive =
-                item.key === 'faq'
-                  ? pathname === '/' && currentHash.toLowerCase() === '#faq'
-                  : pathname === item.href
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            className="border-t border-white/10 bg-black/75 px-4 pb-4 pt-3 backdrop-blur-md sm:px-6 lg:hidden"
+            initial={{ opacity: 0, y: -12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.26, ease: 'easeOut' }}
+          >
+            <nav className="grid gap-2">
+              {navItems.map((item) => {
+                const isActive =
+                  item.key === 'faq'
+                    ? pathname === '/' && currentHash.toLowerCase() === '#faq'
+                    : pathname === item.href
 
-              return (
-                <a
-                  key={item.key}
-                  href={item.href}
-                  onClick={(event) => {
-                    if (item.key === 'faq') {
-                      handleFaqClick(event)
-                    } else {
-                      handleNavClick(item.key)
-                    }
+                return (
+                  <motion.a
+                    key={item.key}
+                    href={item.href}
+                    onClick={(event) => {
+                      if (item.key === 'faq') {
+                        handleFaqClick(event)
+                      } else {
+                        handleNavClick(item.key)
+                      }
 
-                    setMenuOpen(false)
-                  }}
-                  className={`rounded-xl px-4 py-2.5 font-display text-xs uppercase tracking-[0.18em] transition ${
-                    isActive
-                      ? 'bg-[#ef2b37]/90 text-white'
-                      : 'bg-white/[0.03] text-white/85 hover:bg-white/10 hover:text-white'
-                  }`}
-                >
-                  {item.label}
-                </a>
-              )
-            })}
+                      setMenuOpen(false)
+                    }}
+                    className={`rounded-xl px-4 py-2.5 font-display text-xs uppercase tracking-[0.18em] transition ${
+                      isActive
+                        ? 'bg-[#ef2b37]/90 text-white'
+                        : 'bg-white/[0.03] text-white/85 hover:bg-white/10 hover:text-white'
+                    }`}
+                    whileHover={{ x: 4 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    {item.label}
+                  </motion.a>
+                )
+              })}
 
-            <a
-              href={facebookUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="mt-1 inline-flex items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/[0.04] px-4 py-2.5 font-display text-xs uppercase tracking-[0.18em] text-white/85 transition hover:bg-white/10"
-            >
-              <MessageCircle size={14} />
-              Follow on Facebook
-            </a>
-          </nav>
-        </div>
-      )}
-    </header>
+              <motion.a
+                href={facebookUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="mt-1 inline-flex items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/[0.04] px-4 py-2.5 font-display text-xs uppercase tracking-[0.18em] text-white/85 transition hover:bg-white/10"
+                whileHover={{ y: -1 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <MessageCircle size={14} />
+                Follow on Facebook
+              </motion.a>
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.header>
   )
 }
 
@@ -211,7 +245,12 @@ function ContactPage({ phone, facebookUrl }) {
   }
 
   return (
-    <div className="min-h-screen px-4 pb-10 pt-28 text-white sm:px-6 md:px-10">
+    <motion.div
+      className="min-h-screen px-4 pb-10 pt-28 text-white sm:px-6 md:px-10"
+      initial={{ opacity: 0, y: 18 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+    >
       <div className="mx-auto w-full max-w-5xl">
         <a
           href="/"
@@ -221,7 +260,7 @@ function ContactPage({ phone, facebookUrl }) {
           Back to Home
         </a>
 
-        <section className="mt-6 grid gap-6 rounded-3xl border border-white/10 bg-white/[0.03] p-6 md:grid-cols-[0.9fr_1.1fr] md:p-10">
+        <motion.section {...sectionMotion} className="mt-6 grid gap-6 rounded-3xl border border-white/10 bg-white/[0.03] p-6 md:grid-cols-[0.9fr_1.1fr] md:p-10">
           <div>
             <p className="font-display text-xs uppercase tracking-[0.24em] text-[#ef2b37]">
               Contact Royalty Resin
@@ -384,9 +423,9 @@ function ContactPage({ phone, facebookUrl }) {
               Submit Request
             </button>
           </form>
-        </section>
+        </motion.section>
       </div>
-    </div>
+    </motion.div>
   )
 }
 
@@ -410,9 +449,14 @@ function AboutPage({ phone, facebookUrl }) {
   ]
 
   return (
-    <div className="min-h-screen px-4 pb-12 pt-28 text-white sm:px-6 md:px-10">
+    <motion.div
+      className="min-h-screen px-4 pb-12 pt-28 text-white sm:px-6 md:px-10"
+      initial={{ opacity: 0, y: 18 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+    >
       <div className="mx-auto w-full max-w-7xl">
-        <section className="grid gap-6 rounded-3xl border border-white/10 bg-white/[0.03] p-6 md:p-10 lg:grid-cols-[1.05fr_0.95fr]">
+        <motion.section {...sectionMotion} className="grid gap-6 rounded-3xl border border-white/10 bg-white/[0.03] p-6 md:p-10 lg:grid-cols-[1.05fr_0.95fr]">
           <div>
             <p className="font-display text-xs uppercase tracking-[0.24em] text-[#ef2b37]">
               About Us
@@ -448,34 +492,35 @@ function AboutPage({ phone, facebookUrl }) {
 
           <div className="grid grid-cols-2 gap-3 sm:gap-4">
             <img
-              src="/garage.jpg"
+              src="/garage-epoxy-installation-bowling-green-ky.jpg"
               alt="Royalty Resin garage installation"
               className="h-52 w-full rounded-2xl object-cover sm:h-64"
               loading="eager"
             />
             <img
-              src="/floor.jpg"
+              src="/metallic-epoxy-flooring-design-bowling-green-ky.jpg"
               alt="Royalty Resin metallic floor finish"
               className="h-52 w-full rounded-2xl object-cover sm:h-64"
               loading="lazy"
             />
             <img
-              src="/garageresin.jpg"
+              src="/garage-flake-epoxy-finish-bowling-green-ky.jpg"
               alt="Royalty Resin finished flake floor"
               className="col-span-2 h-56 w-full rounded-2xl object-cover sm:h-72"
               loading="lazy"
             />
           </div>
-        </section>
+        </motion.section>
 
-        <section className="mt-8 grid gap-4 md:grid-cols-3">
+        <motion.section {...sectionMotion} className="mt-8 grid gap-4 md:grid-cols-3">
           {pillars.map((pillar) => {
             const Icon = pillar.icon
 
             return (
-              <article
+              <motion.article
                 key={pillar.title}
                 className="rounded-2xl border border-white/10 bg-white/[0.03] p-5"
+                {...cardMotion}
               >
                 <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-[#ef2b37]/30 bg-[#ef2b37]/10">
                   <Icon size={20} className="text-[#ef2b37]" />
@@ -486,12 +531,12 @@ function AboutPage({ phone, facebookUrl }) {
                 <p className="mt-2 text-sm leading-relaxed text-white/72 md:text-base">
                   {pillar.description}
                 </p>
-              </article>
+              </motion.article>
             )
           })}
-        </section>
+        </motion.section>
 
-        <section className="mt-8 rounded-3xl border border-white/10 bg-gradient-to-r from-white/[0.03] to-[#ef2b37]/[0.08] p-6 md:p-8">
+        <motion.section {...sectionMotion} className="mt-8 rounded-3xl border border-white/10 bg-gradient-to-r from-white/[0.03] to-[#ef2b37]/[0.08] p-6 md:p-8">
           <p className="font-display text-xs uppercase tracking-[0.22em] text-[#ef2b37]">
             Our Promise
           </p>
@@ -503,9 +548,9 @@ function AboutPage({ phone, facebookUrl }) {
             compromise finish quality. Every Royalty Resin floor is built to be
             visually strong and structurally dependable.
           </p>
-        </section>
+        </motion.section>
       </div>
-    </div>
+    </motion.div>
   )
 }
 
@@ -514,8 +559,8 @@ function WorksPage({ phone }) {
     {
       title: 'Basement Revival Build',
       category: 'Basement Transformation',
-      video: '/projects/Video%20project%201basement.mp4',
-      poster: '/before%20floor%20garage.jpg',
+      video: '/projects/basement-epoxy-floor-transformation-bowling-green-ky.mp4',
+      poster: '/garage-floor-before-epoxy-bowling-green-ky.jpg',
       description:
         'A full basement upgrade with moisture-managed prep and a seamless resin finish built for clean daily performance.',
       highlights: ['Basement Upgrade', 'Moisture-Aware Prep'],
@@ -524,8 +569,8 @@ function WorksPage({ phone }) {
     {
       title: '700 SQFT Garage Flake System',
       category: 'Garage Flake Makeover',
-      video: '/projects/Video%20Project%202.mp4',
-      poster: '/garage.jpg',
+      video: '/projects/700sqft-garage-flake-epoxy-bowling-green-ky.mp4',
+      poster: '/garage-epoxy-installation-bowling-green-ky.jpg',
       description:
         'This 700 sq ft garage moved from plain slab to a premium flake blend, executed with strict prep and precision topcoating.',
       highlights: ['Flake Blend Finish', 'Prep-to-Perfection'],
@@ -534,8 +579,8 @@ function WorksPage({ phone }) {
     {
       title: 'Royalty Signature Finish',
       category: 'Royalty Signature Coating',
-      video: '/projects/Video%20Project%203.mp4',
-      poster: '/garageresin.jpg',
+      video: '/projects/royalty-signature-epoxy-floor-bowling-green-ky.mp4',
+      poster: '/garage-flake-epoxy-finish-bowling-green-ky.jpg',
       description:
         'Your floor deserves the Royalty treatment: elevated style, durable protection, and a finish designed to stand out long-term.',
       highlights: ['Luxury Look', 'High-Traffic Ready'],
@@ -590,7 +635,12 @@ function WorksPage({ phone }) {
   ]
 
   return (
-    <div className="min-h-screen px-4 pb-10 pt-28 text-white sm:px-6 md:px-10">
+    <motion.div
+      className="min-h-screen px-4 pb-10 pt-28 text-white sm:px-6 md:px-10"
+      initial={{ opacity: 0, y: 18 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+    >
       <div className="mx-auto w-full max-w-7xl">
         <a
           href="/"
@@ -600,7 +650,7 @@ function WorksPage({ phone }) {
           Back to Home
         </a>
 
-        <section className="reveal-up mt-6 rounded-3xl border border-white/10 bg-gradient-to-r from-white/[0.04] via-white/[0.02] to-[#ef2b37]/[0.08] p-6 md:p-10">
+        <motion.section {...sectionMotion} className="reveal-up mt-6 rounded-3xl border border-white/10 bg-gradient-to-r from-white/[0.04] via-white/[0.02] to-[#ef2b37]/[0.08] p-6 md:p-10">
           <p className="font-display text-xs uppercase tracking-[0.24em] text-[#ef2b37]">
             Reel Projects
           </p>
@@ -646,9 +696,9 @@ function WorksPage({ phone }) {
               )
             })}
           </div>
-        </section>
+        </motion.section>
 
-        <section className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        <motion.section {...sectionMotion} className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {reelProjects.map((project, index) => {
             const Icon = project.icon
             const revealClass =
@@ -659,9 +709,11 @@ function WorksPage({ phone }) {
                   : 'reveal-up-delay-2'
 
             return (
-              <article
+              <motion.article
                 key={project.title}
                 className={`works-reel-card group mx-auto w-full max-w-[280px] p-4 sm:max-w-[305px] md:max-w-none ${revealClass}`}
+                {...cardMotion}
+                transition={{ ...cardMotion.transition, delay: index * 0.08 }}
               >
                 <div
                   className="works-reel-media relative mx-auto h-[46svh] min-h-[285px] max-h-[400px] w-auto overflow-hidden rounded-2xl border border-white/10 bg-black sm:h-[50svh] sm:max-h-[440px] md:h-[52svh] md:min-h-[320px] md:max-h-[500px]"
@@ -730,12 +782,12 @@ function WorksPage({ phone }) {
                     ))}
                   </div>
                 </div>
-              </article>
+              </motion.article>
             )
           })}
-        </section>
+        </motion.section>
 
-        <section className="reveal-up-delay-3 mt-8 rounded-3xl border border-white/10 bg-white/[0.03] p-5 sm:p-6 md:p-8">
+        <motion.section {...sectionMotion} className="reveal-up-delay-3 mt-8 rounded-3xl border border-white/10 bg-white/[0.03] p-5 sm:p-6 md:p-8">
           <div className="before-after-heading-wrap rounded-2xl border border-white/10 bg-black/20 p-4 sm:p-5">
             <p className="font-display text-xs uppercase tracking-[0.22em] text-[#ef2b37]">
               Before and After
@@ -767,7 +819,7 @@ function WorksPage({ phone }) {
             <article className="before-after-image-card group">
               <div className="before-after-image-wrap">
                 <img
-                  src="/before%20floor%20garage.jpg"
+                  src="/garage-floor-before-epoxy-bowling-green-ky.jpg"
                   alt="Garage floor before metallic resin installation"
                   className="before-after-image"
                   loading="lazy"
@@ -785,7 +837,7 @@ function WorksPage({ phone }) {
             <article className="before-after-image-card group">
               <div className="before-after-image-wrap">
                 <img
-                  src="/garageresin.jpg"
+                  src="/garage-flake-epoxy-finish-bowling-green-ky.jpg"
                   alt="Garage floor after custom metallic resin transformation"
                   className="before-after-image"
                   loading="lazy"
@@ -794,9 +846,9 @@ function WorksPage({ phone }) {
               </div>
             </article>
           </div>
-        </section>
+        </motion.section>
 
-        <section className="mt-8 rounded-3xl border border-white/10 bg-white/[0.03] p-6 md:p-8">
+        <motion.section {...sectionMotion} className="mt-8 rounded-3xl border border-white/10 bg-white/[0.03] p-6 md:p-8">
           <p className="font-display text-xs uppercase tracking-[0.2em] text-[#ef2b37]">
             Plan Your Project
           </p>
@@ -824,9 +876,9 @@ function WorksPage({ phone }) {
               <ArrowRight size={15} />
             </a>
           </div>
-        </section>
+        </motion.section>
       </div>
-    </div>
+    </motion.div>
   )
 }
 
@@ -835,7 +887,7 @@ function App() {
   const facebookUrl = 'https://www.facebook.com/share/1CKSBtQhmn/?mibextid=wwXIfr'
   const reelShareUrl = 'https://www.facebook.com/share/r/1D1K5u1uMs/'
   const reelDirectUrl = 'https://www.facebook.com/reel/2086956575373191/'
-  const timeLapseVideoUrl = '/timelapsework.mp4'
+  const timeLapseVideoUrl = '/epoxy-floor-installation-timelapse-bowling-green-ky.mp4'
   const autoSlideDelay = 6500
   const manualPauseDelay = 9000
   const normalizedPathname = window.location.pathname.replace(/\/+$/, '') || '/'
@@ -875,13 +927,13 @@ function App() {
 
   const banners = [
     {
-      image: '/banner1.png',
+      image: '/epoxy-flooring-hero-bowling-green-ky.png',
       title: 'Elite Resin Flooring',
       subtitle: 'Built for homes, garages, and business spaces in Kentucky.',
       position: 'center center',
     },
     {
-      image: '/banner2.png',
+      image: '/custom-resin-flooring-hero-bowling-green-ky.png',
       title: 'Statement Epoxy Designs',
       subtitle: 'Custom finishes with depth, gloss, and long-term durability.',
       position: 'center center',
@@ -947,17 +999,17 @@ function App() {
   const gallery = [
     {
       title: 'Flake Garage System',
-      image: '/garageresin.jpg',
+      image: '/garage-flake-epoxy-finish-bowling-green-ky.jpg',
       tag: 'Clean. Tough. Timeless.',
     },
     {
       title: 'Metallic Resin Flow',
-      image: '/floor.jpg',
+      image: '/metallic-epoxy-flooring-design-bowling-green-ky.jpg',
       tag: 'Art-level custom movement.',
     },
     {
       title: 'Commercial Durability',
-      image: '/daily.jpg',
+      image: '/commercial-epoxy-flooring-bowling-green-ky.jpg',
       tag: 'Built for daily traffic.',
     },
   ]
@@ -1079,7 +1131,12 @@ function App() {
       <GlobalHeader facebookUrl={facebookUrl} pathname={normalizedPathname} />
 
       <main>
-        <section className="relative isolate overflow-hidden">
+        <motion.section
+          className="relative isolate overflow-hidden"
+          initial={{ opacity: 0, scale: 1.01 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+        >
           <div className="relative aspect-[16/9] min-h-[360px] w-full sm:min-h-[420px] md:aspect-auto md:h-[100svh]">
             {banners.map((banner, index) => (
               <img
@@ -1102,39 +1159,68 @@ function App() {
 
             <div className="absolute inset-0 flex items-end md:items-center">
               <div className="mx-auto flex h-full w-full max-w-7xl items-end md:items-center px-4 pb-8 pt-24 sm:px-6 sm:pb-10 md:px-10 md:pb-12 md:pt-24">
-                <div className="max-w-[290px] sm:max-w-xl md:max-w-3xl">
-                  <p className="font-display text-[10px] uppercase tracking-[0.3em] text-[#ef2b37] sm:text-xs md:text-sm">
+                <motion.div
+                  className="max-w-[290px] sm:max-w-xl md:max-w-3xl"
+                  initial={{ opacity: 0, y: 24 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
+                >
+                  <motion.p
+                    className="font-display text-[10px] uppercase tracking-[0.3em] text-[#ef2b37] sm:text-xs md:text-sm"
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.45, delay: 0.24 }}
+                  >
                     Premium epoxy and resin floors
-                  </p>
+                  </motion.p>
 
-                  <h1 className="mt-2 font-display text-[2rem] uppercase leading-[0.9] text-white sm:text-5xl md:mt-4 md:text-6xl lg:text-7xl">
+                  <motion.h1
+                    className="mt-2 font-display text-[2rem] uppercase leading-[0.9] text-white sm:text-5xl md:mt-4 md:text-6xl lg:text-7xl"
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.52, delay: 0.3 }}
+                  >
                     {banners[activeBanner].title}
-                  </h1>
+                  </motion.h1>
 
-                  <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/85 sm:text-base md:mt-4 md:text-xl">
+                  <motion.p
+                    className="mt-3 max-w-2xl text-sm leading-relaxed text-white/85 sm:text-base md:mt-4 md:text-xl"
+                    initial={{ opacity: 0, y: 14 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.38 }}
+                  >
                     {banners[activeBanner].subtitle}
-                  </p>
+                  </motion.p>
 
-                  <div className="mt-4 flex flex-wrap gap-2.5 sm:mt-5 sm:gap-3 md:mt-7">
-                    <a
+                  <motion.div
+                    className="mt-4 flex flex-wrap gap-2.5 sm:mt-5 sm:gap-3 md:mt-7"
+                    initial={{ opacity: 0, y: 14 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.46 }}
+                  >
+                    <motion.a
                       href={`tel:${phone}`}
                       className="inline-flex items-center justify-center gap-2 rounded-full bg-[#ef2b37] px-4 py-2.5 font-display text-[10px] uppercase tracking-[0.2em] text-white transition hover:bg-[#c41722] sm:px-5 sm:text-xs md:px-6 md:py-3.5 md:text-sm"
+                      whileHover={{ y: -2, scale: 1.03 }}
+                      whileTap={{ scale: 0.97 }}
                     >
                       <PhoneCall size={15} />
                       Call for Free Estimate
-                    </a>
+                    </motion.a>
 
-                    <a
+                    <motion.a
                       href={facebookUrl}
                       target="_blank"
                       rel="noreferrer"
                       className="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-2.5 font-display text-[10px] uppercase tracking-[0.2em] text-white transition hover:bg-white/20 sm:px-5 sm:text-xs md:px-6 md:py-3.5 md:text-sm"
+                      whileHover={{ y: -2, scale: 1.03 }}
+                      whileTap={{ scale: 0.97 }}
                     >
                       Message on Facebook
                       <ArrowRight size={14} />
-                    </a>
-                  </div>
-                </div>
+                    </motion.a>
+                  </motion.div>
+                </motion.div>
               </div>
             </div>
 
@@ -1176,9 +1262,9 @@ function App() {
               </>
             )}
           </div>
-        </section>
+        </motion.section>
 
-        <section className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:px-10 md:py-20 lg:grid-cols-[1.08fr_0.92fr]">
+        <motion.section {...sectionMotion} className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:px-10 md:py-20 lg:grid-cols-[1.08fr_0.92fr]">
           <div>
             <p className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 font-display text-xs uppercase tracking-[0.24em] text-white/80">
               <MapPin size={14} className="text-[#ef2b37]" />
@@ -1233,7 +1319,7 @@ function App() {
             <div className="mx-auto max-w-md">
               <article className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] p-3 shadow-2xl shadow-black/30">
                 <img
-                  src="/garage.jpg"
+                  src="/garage-epoxy-installation-bowling-green-ky.jpg"
                   alt="Garage epoxy flooring"
                   className="h-[24rem] w-full rounded-2xl object-cover md:h-[28rem]"
                   loading="eager"
@@ -1250,7 +1336,7 @@ function App() {
 
               <article className="absolute -left-10 top-8 hidden w-36 rotate-[-8deg] overflow-hidden rounded-2xl border border-white/15 bg-black/40 p-2 backdrop-blur-sm md:block">
                 <img
-                  src="/door.jpg"
+                  src="/epoxy-floor-edge-detail-bowling-green-ky.jpg"
                   alt="Epoxy door detail"
                   className="h-36 w-full rounded-xl object-cover"
                   loading="lazy"
@@ -1259,7 +1345,7 @@ function App() {
 
               <article className="absolute -right-8 bottom-10 hidden w-32 rotate-[8deg] overflow-hidden rounded-2xl border border-white/15 bg-black/40 p-2 backdrop-blur-sm md:block">
                 <img
-                  src="/floor.jpg"
+                  src="/metallic-epoxy-flooring-design-bowling-green-ky.jpg"
                   alt="Epoxy floor detail"
                   className="h-32 w-full rounded-xl object-cover"
                   loading="lazy"
@@ -1267,16 +1353,17 @@ function App() {
               </article>
             </div>
           </div>
-        </section>
+        </motion.section>
 
-        <section className="mx-auto grid max-w-7xl gap-6 px-4 pb-14 sm:px-6 md:grid-cols-3 md:px-10 md:pb-20">
+        <motion.section {...sectionMotion} className="mx-auto grid max-w-7xl gap-6 px-4 pb-14 sm:px-6 md:grid-cols-3 md:px-10 md:pb-20">
           {services.map((service) => {
             const Icon = service.icon
 
             return (
-              <article
+              <motion.article
                 key={service.title}
                 className="relative overflow-visible rounded-3xl border border-white/10 bg-white/[0.03] p-6 transition hover:-translate-y-1"
+                {...cardMotion}
               >
                 <svg
                   className="service-image-worm-svg"
@@ -1326,12 +1413,12 @@ function App() {
                 <p className="mt-4 text-base leading-relaxed text-white/70">
                   {service.description}
                 </p>
-              </article>
+              </motion.article>
             )
           })}
-        </section>
+        </motion.section>
 
-        <section className="mx-auto grid max-w-7xl gap-8 px-4 pb-14 sm:px-6 md:px-10 md:pb-20 lg:grid-cols-[1.1fr_0.9fr]">
+        <motion.section {...sectionMotion} className="mx-auto grid max-w-7xl gap-8 px-4 pb-14 sm:px-6 md:px-10 md:pb-20 lg:grid-cols-[1.1fr_0.9fr]">
           <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-8 md:p-10">
             <p className="font-display text-sm uppercase tracking-[0.2em] text-[#ef2b37]">
               Why Royalty Resin
@@ -1349,18 +1436,19 @@ function App() {
 
           <ul className="grid gap-3">
             {highlights.map((item) => (
-              <li
+              <motion.li
                 key={item}
                 className="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4"
+                {...cardMotion}
               >
                 <CheckCircle2 className="mt-0.5 shrink-0 text-[#ef2b37]" size={18} />
                 <span className="text-base text-white/80">{item}</span>
-              </li>
+              </motion.li>
             ))}
           </ul>
-        </section>
+        </motion.section>
 
-        <section className="mx-auto max-w-7xl px-4 pb-14 sm:px-6 md:px-10 md:pb-20">
+        <motion.section {...sectionMotion} className="mx-auto max-w-7xl px-4 pb-14 sm:px-6 md:px-10 md:pb-20">
           <div className="mb-8">
             <p className="font-display text-sm uppercase tracking-[0.2em] text-[#ef2b37]">
               Installation Flow
@@ -1375,9 +1463,10 @@ function App() {
               const Icon = step.icon
 
               return (
-                <article
+                <motion.article
                   key={step.title}
                   className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] p-6"
+                  {...cardMotion}
                 >
                   <div className="absolute -right-12 -top-12 h-32 w-32 rounded-full bg-[#ef2b37]/10 blur-3xl" />
                   <p className="font-display text-sm uppercase tracking-[0.2em] text-white/45">
@@ -1394,13 +1483,13 @@ function App() {
                   <p className="mt-3 text-base leading-relaxed text-white/70">
                     {step.description}
                   </p>
-                </article>
+                </motion.article>
               )
             })}
           </div>
-        </section>
+        </motion.section>
 
-        <section className="mx-auto max-w-7xl px-4 pb-14 sm:px-6 md:px-10 md:pb-20">
+        <motion.section {...sectionMotion} className="mx-auto max-w-7xl px-4 pb-14 sm:px-6 md:px-10 md:pb-20">
           <div className="mb-8">
             <p className="font-display text-sm uppercase tracking-[0.2em] text-[#ef2b37]">
               Featured Looks
@@ -1412,9 +1501,10 @@ function App() {
 
           <div className="grid gap-6 md:grid-cols-3">
             {gallery.map((item) => (
-              <article
+              <motion.article
                 key={item.title}
                 className="group relative overflow-hidden rounded-3xl border border-white/10"
+                {...cardMotion}
               >
                 <img
                   src={item.image}
@@ -1431,13 +1521,14 @@ function App() {
                     {item.tag}
                   </p>
                 </div>
-              </article>
+              </motion.article>
             ))}
           </div>
-        </section>
+        </motion.section>
 
-        <section
+        <motion.section
           ref={timeLapseSectionRef}
+          {...sectionMotion}
           className="mx-auto max-w-7xl px-4 pb-14 sm:px-6 md:px-10 md:pb-20"
         >
           <div className="grid items-center gap-8 lg:grid-cols-[1fr_auto] lg:gap-10">
@@ -1493,7 +1584,7 @@ function App() {
                   ref={timeLapseVideoRef}
                   src={timeLapseVideoUrl}
                   className="absolute inset-0 h-full w-full object-cover"
-                  poster="/garage.jpg"
+                  poster="/garage-epoxy-installation-bowling-green-ky.jpg"
                   muted
                   loop
                   controls
@@ -1516,9 +1607,9 @@ function App() {
               </div>
             </div>
           </div>
-        </section>
+        </motion.section>
 
-        <section className="mx-auto max-w-7xl px-4 pb-14 sm:px-6 md:px-10 md:pb-20">
+        <motion.section {...sectionMotion} className="mx-auto max-w-7xl px-4 pb-14 sm:px-6 md:px-10 md:pb-20">
           <div className="mb-8">
             <p className="font-display text-sm uppercase tracking-[0.2em] text-[#ef2b37]">
               Client Recommendations
@@ -1533,7 +1624,7 @@ function App() {
           </div>
 
           <div className="grid gap-6 md:grid-cols-3">
-            <article className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+            <motion.article className="rounded-2xl border border-white/10 bg-white/[0.03] p-5" {...cardMotion}>
               <div className="mb-4 flex items-center gap-1 text-[#ef2b37]">
                 {Array.from({ length: 5 }).map((_, idx) => (
                   <Star key={idx} size={16} fill="currentColor" />
@@ -1547,9 +1638,9 @@ function App() {
               <p className="mt-5 font-display text-sm uppercase tracking-[0.18em] text-white/60">
                 Jason M. | 2-Car Garage | Bowling Green
               </p>
-            </article>
+            </motion.article>
 
-            <article className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+            <motion.article className="rounded-2xl border border-white/10 bg-white/[0.03] p-5" {...cardMotion}>
               <div className="mb-4 flex items-center gap-1 text-[#ef2b37]">
                 {Array.from({ length: 5 }).map((_, idx) => (
                   <Star key={idx} size={16} fill="currentColor" />
@@ -1563,9 +1654,9 @@ function App() {
               <p className="mt-5 font-display text-sm uppercase tracking-[0.18em] text-white/60">
                 Maria L. | Commercial Space | Scottsville
               </p>
-            </article>
+            </motion.article>
 
-            <article className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+            <motion.article className="rounded-2xl border border-white/10 bg-white/[0.03] p-5" {...cardMotion}>
               <div className="mb-4 flex items-center gap-1 text-[#ef2b37]">
                 {Array.from({ length: 5 }).map((_, idx) => (
                   <Star key={idx} size={16} fill="currentColor" />
@@ -1579,11 +1670,11 @@ function App() {
               <p className="mt-5 font-display text-sm uppercase tracking-[0.18em] text-white/60">
                 Andrew & Beth K. | Basement Epoxy | Franklin
               </p>
-            </article>
+            </motion.article>
           </div>
-        </section>
+        </motion.section>
 
-        <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 md:px-10">
+        <motion.section {...sectionMotion} className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 md:px-10">
           <div className="rounded-3xl border border-[#ef2b37]/30 bg-gradient-to-r from-white/[0.04] to-[#ef2b37]/[0.08] p-8 text-center md:p-12">
             <p className="font-display text-sm uppercase tracking-[0.24em] text-[#ef2b37]">
               Start Your Project
@@ -1599,26 +1690,34 @@ function App() {
             </p>
 
             <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <a
+              <motion.a
                 href={`tel:${phone}`}
                 className="inline-flex items-center justify-center gap-2 rounded-full bg-[#ef2b37] px-8 py-3 font-display text-sm uppercase tracking-[0.2em] text-white transition hover:bg-[#c41722]"
+                whileHover={{ y: -2, scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
               >
                 <PhoneCall size={17} />
                 {phone}
-              </a>
+              </motion.a>
 
-              <a
+              <motion.a
                 href="/contact"
                 className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-8 py-3 font-display text-sm uppercase tracking-[0.2em] text-white transition hover:bg-white/20"
+                whileHover={{ y: -2, scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
               >
                 <ArrowRight size={17} />
                 Contact Us
-              </a>
+              </motion.a>
             </div>
           </div>
-        </section>
+        </motion.section>
 
-        <section id="faq" className="mx-auto max-w-7xl scroll-mt-28 px-4 pb-16 sm:px-6 md:px-10 md:pb-20">
+        <motion.section
+          id="faq"
+          {...sectionMotion}
+          className="mx-auto max-w-7xl scroll-mt-28 px-4 pb-16 sm:px-6 md:px-10 md:pb-20"
+        >
           <div className="mb-8">
             <p className="font-display text-sm uppercase tracking-[0.2em] text-[#ef2b37]">
               FAQ
@@ -1633,9 +1732,10 @@ function App() {
 
           <div className="grid gap-3">
             {faqs.map((item) => (
-              <details
+              <motion.details
                 key={item.question}
                 className="group rounded-2xl border border-white/10 bg-white/[0.03] p-4"
+                {...cardMotion}
               >
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-display text-xl uppercase tracking-[0.08em] text-white marker:content-none md:text-2xl">
                   <span>{item.question}</span>
@@ -1644,13 +1744,19 @@ function App() {
                 <p className="mt-3 pr-8 text-base leading-relaxed text-white/75">
                   {item.answer}
                 </p>
-              </details>
+              </motion.details>
             ))}
           </div>
-        </section>
+        </motion.section>
       </main>
 
-      <footer className="border-t border-white/10">
+      <motion.footer
+        className="border-t border-white/10"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.7 }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      >
         <div className="mx-auto flex w-full max-w-7xl flex-col gap-3 px-4 py-10 text-center sm:px-6 md:px-10 md:text-left">
           <p className="font-display text-3xl uppercase text-white md:text-4xl">
             Royalty Resin
@@ -1662,7 +1768,7 @@ function App() {
             Serving Bowling Green, KY and surrounding areas.
           </p>
         </div>
-      </footer>
+      </motion.footer>
     </div>
   )
 }

@@ -47,11 +47,23 @@ body {
       transparent 30px
     ),
     linear-gradient(145deg, #000 0%, #000 14%, #11151f 34%, #17101a 56%, #0e1320 78%, #0f171f 100%);
+  background-size: 120% 120%, 150% 150%, 145% 145%, 130% 130%, auto, auto, 170% 170%;
+  animation: ambient-gradient-shift 24s ease-in-out infinite alternate;
   color: #edf1f7;
   background-attachment: fixed;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+a,
+button {
+  transition:
+    transform 0.24s ease,
+    box-shadow 0.28s ease,
+    background-color 0.24s ease,
+    color 0.24s ease,
+    border-color 0.24s ease;
 }
 
 ::selection {
@@ -344,5 +356,49 @@ body {
   100% {
     transform: translateX(360%);
     opacity: 0;
+  }
+}
+
+@keyframes ambient-gradient-shift {
+  0% {
+    background-position:
+      50% 0%,
+      12% 10%,
+      88% 18%,
+      74% 86%,
+      0 0,
+      0 0,
+      0% 0%;
+  }
+
+  50% {
+    background-position:
+      50% 8%,
+      15% 12%,
+      85% 21%,
+      70% 80%,
+      0 0,
+      0 0,
+      48% 34%;
+  }
+
+  100% {
+    background-position:
+      50% 14%,
+      18% 14%,
+      82% 25%,
+      66% 76%,
+      0 0,
+      0 0,
+      100% 62%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
   }
 }
