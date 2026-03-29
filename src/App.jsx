@@ -34,6 +34,18 @@ const cardMotion = {
   transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] },
 }
 
+const sectionMotionOnLoad = {
+  initial: { opacity: 0, y: 30 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
+}
+
+const cardMotionOnLoad = {
+  initial: { opacity: 0, y: 22, scale: 0.985 },
+  animate: { opacity: 1, y: 0, scale: 1 },
+  transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] },
+}
+
 const mobileCarouselVariants = {
   enter: (direction) => ({
     x: direction > 0 ? 70 : -70,
@@ -652,12 +664,12 @@ function WorksPage({ phone }) {
       icon: Layers3,
     },
     {
-      title: '700 SQFT Garage Flake System',
+      title: '1100 SQ FT Garage Flake System',
       category: 'Garage Flake Makeover',
       video: '/projects/700sqft-garage-flake-epoxy-bowling-green-ky.mp4',
       poster: '/garage-epoxy-installation-bowling-green-ky.jpg',
       description:
-        'This 700 sq ft garage moved from plain slab to a premium flake blend, executed with strict prep and precision topcoating.',
+        'This 1100 sq ft garage moved from plain slab to a premium flake blend, executed with strict prep and precision topcoating.',
       highlights: ['Flake Blend Finish', 'Prep-to-Perfection'],
       icon: Hammer,
     },
@@ -735,7 +747,7 @@ function WorksPage({ phone }) {
           Back to Home
         </a>
 
-        <motion.section {...sectionMotion} className="reveal-up mt-6 rounded-3xl border border-white/10 bg-gradient-to-r from-white/[0.04] via-white/[0.02] to-[#ef2b37]/[0.08] p-6 md:p-10">
+        <motion.section {...sectionMotionOnLoad} className="reveal-up mt-6 rounded-3xl border border-white/10 bg-gradient-to-r from-white/[0.04] via-white/[0.02] to-[#ef2b37]/[0.08] p-6 md:p-10">
           <p className="font-display text-xs uppercase tracking-[0.24em] text-[#ef2b37]">
             Reel Projects
           </p>
@@ -783,7 +795,7 @@ function WorksPage({ phone }) {
           </div>
         </motion.section>
 
-        <motion.section {...sectionMotion} className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        <motion.section {...sectionMotionOnLoad} className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {reelProjects.map((project, index) => {
             const Icon = project.icon
             const revealClass =
@@ -797,8 +809,8 @@ function WorksPage({ phone }) {
               <motion.article
                 key={project.title}
                 className={`works-reel-card group mx-auto w-full max-w-[280px] p-4 sm:max-w-[305px] md:max-w-none ${revealClass}`}
-                {...cardMotion}
-                transition={{ ...cardMotion.transition, delay: index * 0.08 }}
+                {...cardMotionOnLoad}
+                transition={{ ...cardMotionOnLoad.transition, delay: index * 0.08 }}
               >
                 <div
                   className="works-reel-media relative mx-auto h-[46svh] min-h-[285px] max-h-[400px] w-auto overflow-hidden rounded-2xl border border-white/10 bg-black sm:h-[50svh] sm:max-h-[440px] md:h-[52svh] md:min-h-[320px] md:max-h-[500px]"
@@ -837,7 +849,7 @@ function WorksPage({ phone }) {
                     controls
                     playsInline
                     autoPlay={index === 0}
-                    preload="metadata"
+                    preload="auto"
                   />
 
                   <div className="absolute inset-x-3 top-3 flex items-center justify-between rounded-xl border border-white/15 bg-black/45 px-3 py-2 backdrop-blur-sm">
@@ -1108,7 +1120,7 @@ function App() {
     {
       question: 'How long before I can walk or park on the floor?',
       answer:
-        'Light foot traffic is typically possible within 24 hours. Vehicle traffic usually requires 48 to 72 hours, depending on temperature and the selected topcoat.',
+        'Light foot traffic is typically possible within 24 hours. Medium-weight objects can usually be placed within 72 hours. Vehicle traffic is recommended between 5 and 7 days, depending on temperature and the selected topcoat.',
     },
     {
       question: 'Do epoxy floors crack or peel over time?',
@@ -1151,9 +1163,7 @@ function App() {
   const [activeTestimonial, setActiveTestimonial] = useState(0)
   const [testimonialDirection, setTestimonialDirection] = useState(1)
   const [autoplayPaused, setAutoplayPaused] = useState(false)
-  const [playTimeLapse, setPlayTimeLapse] = useState(false)
   const resumeAutoplayTimeoutRef = useRef(null)
-  const timeLapseSectionRef = useRef(null)
   const timeLapseVideoRef = useRef(null)
 
   const moveProcessStep = (direction) => {
@@ -1216,30 +1226,7 @@ function App() {
   }, [])
 
   useEffect(() => {
-    if (!timeLapseSectionRef.current || playTimeLapse) {
-      return undefined
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setPlayTimeLapse(true)
-          observer.disconnect()
-        }
-      },
-      {
-        threshold: 0.2,
-        rootMargin: '0px 0px -8% 0px',
-      },
-    )
-
-    observer.observe(timeLapseSectionRef.current)
-
-    return () => observer.disconnect()
-  }, [playTimeLapse])
-
-  useEffect(() => {
-    if (!playTimeLapse || !timeLapseVideoRef.current) {
+    if (!timeLapseVideoRef.current) {
       return
     }
 
@@ -1247,7 +1234,7 @@ function App() {
     if (playAttempt && typeof playAttempt.catch === 'function') {
       playAttempt.catch(() => {})
     }
-  }, [playTimeLapse])
+  }, [])
 
   return (
     <div className="min-h-screen text-white">
@@ -1710,9 +1697,10 @@ function App() {
           </div>
         </section>
 
-        <section
-          ref={timeLapseSectionRef}
+        <motion.section
           className="mx-auto max-w-7xl px-4 pb-14 sm:px-6 md:px-10 md:pb-20"
+          {...sectionMotionOnLoad}
+          transition={{ ...sectionMotionOnLoad.transition, delay: 0.12 }}
         >
           <div className="grid items-center gap-8 lg:grid-cols-[1fr_auto] lg:gap-10">
             <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 md:p-8">
@@ -1772,8 +1760,8 @@ function App() {
                   loop
                   controls
                   playsInline
-                  autoPlay={playTimeLapse}
-                  preload="metadata"
+                  autoPlay
+                  preload="auto"
                 />
               </div>
 
@@ -1790,7 +1778,7 @@ function App() {
               </div>
             </div>
           </div>
-        </section>
+        </motion.section>
 
         <section className="mx-auto max-w-7xl px-4 pb-14 sm:px-6 md:px-10 md:pb-20">
           <div className="mb-8">
