@@ -171,8 +171,8 @@ function GlobalHeader({ facebookUrl, pathname }) {
                 }}
                 className={`rounded-full px-4 py-2 font-display text-xs uppercase tracking-[0.18em] transition ${
                   isActive
-                    ? 'bg-[#ef2b37]/90 text-white'
-                    : 'text-white/80 hover:bg-white/10 hover:text-white'
+                    ? 'border border-[#ef2b37]/45 bg-[#ef2b37]/16 text-[#ffd7da] shadow-[0_6px_16px_rgba(239,43,55,0.2)]'
+                    : 'border border-transparent text-white/80 hover:border-white/15 hover:bg-white/10 hover:text-white'
                 }`}
                 whileHover={{ y: -2, scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
@@ -185,12 +185,26 @@ function GlobalHeader({ facebookUrl, pathname }) {
 
         <div className="hidden items-center gap-2 lg:flex">
           <a
+            href="/flake"
+            className="inline-flex items-center gap-1.5 rounded-full border border-[#ef2b37]/55 bg-[#ef2b37]/90 px-3.5 py-1.5 font-display text-[11px] uppercase tracking-[0.16em] text-white shadow-[0_8px_24px_rgba(239,43,55,0.28)] transition hover:-translate-y-0.5 hover:bg-[#d81e2a]"
+          >
+            <Layers3 size={13} />
+            Flake Floors
+          </a>
+          <a
+            href="/metallic"
+            className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/12 px-3.5 py-1.5 font-display text-[11px] uppercase tracking-[0.16em] text-white transition hover:-translate-y-0.5 hover:bg-white/20"
+          >
+            <PaintBucket size={13} />
+            Metallic Resin
+          </a>
+          <a
             href={facebookUrl}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/35 px-4 py-2 font-display text-xs uppercase tracking-[0.18em] text-white transition hover:bg-white/10"
+            className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-black/35 px-3.5 py-1.5 font-display text-[11px] uppercase tracking-[0.16em] text-white transition hover:bg-white/10"
           >
-            <MessageCircle size={14} />
+            <MessageCircle size={13} />
             Facebook
           </a>
         </div>
@@ -237,8 +251,8 @@ function GlobalHeader({ facebookUrl, pathname }) {
                     }}
                     className={`rounded-xl px-4 py-2.5 font-display text-xs uppercase tracking-[0.18em] transition ${
                       isActive
-                        ? 'bg-[#ef2b37]/90 text-white'
-                        : 'bg-white/[0.03] text-white/85 hover:bg-white/10 hover:text-white'
+                        ? 'border border-[#ef2b37]/45 bg-[#ef2b37]/18 text-[#ffd7da]'
+                        : 'border border-transparent bg-white/[0.03] text-white/85 hover:bg-white/10 hover:text-white'
                     }`}
                     whileHover={{ x: 4 }}
                     whileTap={{ scale: 0.98 }}
@@ -247,6 +261,25 @@ function GlobalHeader({ facebookUrl, pathname }) {
                   </motion.a>
                 )
               })}
+
+              <div className="mt-1 grid grid-cols-2 gap-2">
+                <a
+                  href="/flake"
+                  onClick={() => setMenuOpen(false)}
+                  className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-[#ef2b37]/55 bg-[#ef2b37]/88 px-3 py-2.5 font-display text-[11px] uppercase tracking-[0.16em] text-white"
+                >
+                  <Layers3 size={13} />
+                  Flake Floors
+                </a>
+                <a
+                  href="/metallic"
+                  onClick={() => setMenuOpen(false)}
+                  className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-white/20 bg-white/[0.06] px-3 py-2.5 font-display text-[11px] uppercase tracking-[0.16em] text-white"
+                >
+                  <PaintBucket size={13} />
+                  Metallic Resin
+                </a>
+              </div>
 
               <motion.a
                 href={facebookUrl}
@@ -979,6 +1012,601 @@ function WorksPage({ phone }) {
   )
 }
 
+function FlakePage({ phone }) {
+  const [activeImage, setActiveImage] = useState(null)
+
+  const flakePairs = [
+    {
+      before: '/flake flooring/flake-flooring-before-project-1.jpg',
+      after: '/flake flooring/flake-flooring-after-project-1.jpg',
+    },
+    {
+      before: '/flake flooring/flake-flooring-before-project-2.jpg',
+      after: '/flake flooring/flake-flooring-after-project-2.jpg',
+    },
+    {
+      before: '/flake flooring/flake-flooring-before-project-3.jpg',
+      after: '/flake flooring/flake-flooring-after-project-3.jpg',
+    },
+  ]
+
+  const flakeHighlights = [
+    {
+      label: 'Durable Coating Performance',
+      icon: ShieldCheck,
+    },
+    {
+      label: 'Decorative Flake Appearance',
+      icon: Star,
+    },
+  ]
+
+  const betweenPairNotes = [
+    'Flake flooring starts with mechanical surface preparation, including diamond grinding and crack treatment. That prep stage is essential for long-term adhesion and helps reduce the risk of peeling under regular use.',
+    'After prep, a pigmented base coat is applied and decorative flakes are broadcast for visual texture and coverage. A protective topcoat is then added to improve abrasion resistance, simplify cleaning, and keep a consistent finish over time.',
+  ]
+
+  useEffect(() => {
+    // Preload comparison images immediately on route entry.
+    const imageSources = [
+      '/flake flooring/flake-flooring-before-project-1.jpg',
+      '/flake flooring/flake-flooring-after-project-1.jpg',
+      '/flake flooring/flake-flooring-before-project-2.jpg',
+      '/flake flooring/flake-flooring-after-project-2.jpg',
+      '/flake flooring/flake-flooring-before-project-3.jpg',
+      '/flake flooring/flake-flooring-after-project-3.jpg',
+    ]
+
+    imageSources.forEach((src) => {
+      const image = new Image()
+      image.src = src
+    })
+  }, [])
+
+  const openImagePreview = (src, alt) => {
+    setActiveImage({ src, alt })
+  }
+
+  const closeImagePreview = () => {
+    setActiveImage(null)
+  }
+
+  return (
+    <motion.div
+      className="min-h-screen px-4 pb-10 pt-28 text-white sm:px-6 md:px-10"
+      initial={{ opacity: 0, y: 18 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+    >
+      <div className="mx-auto w-full max-w-7xl">
+        <a
+          href="/"
+          className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-4 py-2 font-display text-xs uppercase tracking-[0.18em] text-white transition hover:bg-white/10"
+        >
+          <ArrowRight size={14} className="rotate-180" />
+          Back to Home
+        </a>
+
+        <motion.section
+          {...sectionMotionOnLoad}
+          className="relative mt-6 overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-[#131927]/90 via-[#090b11]/92 to-[#190d12]/95 p-6 md:p-10"
+        >
+          <div className="absolute -left-24 -top-20 h-56 w-56 rounded-full bg-[#ef2b37]/18 blur-3xl" />
+          <div className="absolute -bottom-28 right-6 h-56 w-56 rounded-full bg-[#6e86b0]/22 blur-3xl" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,rgba(255,255,255,0.06),transparent_35%),radial-gradient(circle_at_85%_78%,rgba(239,43,55,0.14),transparent_42%)]" />
+
+          <div className="relative">
+            <p className="font-display text-xs uppercase tracking-[0.24em] text-[#ef2b37]">
+              Flake Flooring Portfolio
+            </p>
+            <h1 className="mt-4 font-display text-5xl uppercase leading-[0.9] text-white md:text-6xl">
+              Flake Flooring System Before and After
+            </h1>
+            <p className="mt-4 max-w-3xl text-base leading-relaxed text-white/74 md:text-lg">
+              Real before and after examples of decorative flake flooring. This
+              finish combines visual texture, cleaner appearance, and a protective
+              coating layer built for everyday use.
+            </p>
+
+            <div className="mt-6 grid gap-3 sm:grid-cols-3">
+              {flakeHighlights.map((item) => {
+                const Icon = item.icon
+
+                return (
+                  <div
+                    key={item.label}
+                    className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-black/28 px-3 py-2"
+                  >
+                    <Icon size={15} className="text-[#ef2b37]" />
+                    <span className="font-display text-xs uppercase tracking-[0.12em] text-white/85">
+                      {item.label}
+                    </span>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        </motion.section>
+
+        <motion.section
+          {...sectionMotionOnLoad}
+          transition={{ ...sectionMotionOnLoad.transition, delay: 0.08 }}
+          className="mx-auto mt-8 w-full max-w-6xl"
+        >
+          <div className="space-y-7">
+            {flakePairs.map((pair, index) => (
+              <div key={`${pair.before}-${pair.after}`} className="space-y-4">
+                <motion.article
+                  className="group relative overflow-hidden rounded-3xl border border-white/10 bg-black/30"
+                  {...cardMotionOnLoad}
+                  transition={{ ...cardMotionOnLoad.transition, delay: index * 0.08 }}
+                >
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_10%_20%,rgba(239,43,55,0.12),transparent_42%),radial-gradient(circle_at_90%_82%,rgba(120,150,196,0.14),transparent_45%)]" />
+
+                  <div className="relative grid grid-cols-2 gap-3 p-3 sm:gap-4 sm:p-4 md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] md:gap-5 md:p-5">
+                    <article className="relative aspect-square overflow-hidden rounded-2xl border border-white/12 bg-black/35">
+                      <button
+                        type="button"
+                        onClick={() => openImagePreview(pair.before, 'Before flake flooring installation')}
+                        className="block h-full w-full cursor-zoom-in"
+                        aria-label="Open before image preview"
+                      >
+                        <img
+                          src={pair.before}
+                          alt="Before flake flooring installation"
+                          className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.03]"
+                          loading="eager"
+                        />
+                      </button>
+                      <span className="absolute left-3 top-3 rounded-full border border-white/20 bg-black/55 px-3 py-1 font-display text-[10px] uppercase tracking-[0.16em] text-white/85 sm:text-xs">
+                        Before
+                      </span>
+                    </article>
+
+                    <div className="hidden items-center justify-center md:flex">
+                      <span className="before-after-divider inline-flex h-14 w-14 items-center justify-center rounded-full border border-[#ef2b37]/45 bg-[#ef2b37]/20 text-[#ef2b37]">
+                        <ArrowRight size={22} />
+                      </span>
+                    </div>
+
+                    <article className="relative aspect-square overflow-hidden rounded-2xl border border-white/12 bg-black/35">
+                      <button
+                        type="button"
+                        onClick={() => openImagePreview(pair.after, 'After flake flooring installation')}
+                        className="block h-full w-full cursor-zoom-in"
+                        aria-label="Open after image preview"
+                      >
+                        <img
+                          src={pair.after}
+                          alt="After flake flooring installation"
+                          className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.03]"
+                          loading="eager"
+                        />
+                      </button>
+                      <span className="absolute left-3 top-3 rounded-full border border-white/20 bg-[#ef2b37]/78 px-3 py-1 font-display text-[10px] uppercase tracking-[0.16em] text-white sm:text-xs">
+                        After
+                      </span>
+                    </article>
+                  </div>
+                </motion.article>
+
+                {index < betweenPairNotes.length && (
+                  <motion.p
+                    className="rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-4 text-base leading-relaxed text-white/74 md:px-6 md:py-5 md:text-lg"
+                    {...cardMotionOnLoad}
+                    transition={{ ...cardMotionOnLoad.transition, delay: index * 0.08 + 0.04 }}
+                  >
+                    {betweenPairNotes[index]}
+                  </motion.p>
+                )}
+              </div>
+            ))}
+          </div>
+        </motion.section>
+
+        <motion.section
+          {...sectionMotionOnLoad}
+          transition={{ ...sectionMotionOnLoad.transition, delay: 0.16 }}
+          className="mt-8 rounded-3xl border border-white/10 bg-gradient-to-r from-white/[0.04] via-[#1a1012]/50 to-[#ef2b37]/[0.12] p-6 md:p-8"
+        >
+          <p className="font-display text-xs uppercase tracking-[0.24em] text-[#ef2b37]">
+            Ready for your flake project?
+          </p>
+          <h2 className="mt-3 font-display text-4xl uppercase leading-[0.9] text-white md:text-5xl">
+            Let&apos;s build your own Flake Flooring System
+          </h2>
+          <p className="mt-3 max-w-3xl text-base leading-relaxed text-white/72 md:text-lg">
+            Flake flooring combines decorative texture and long-term protection.
+            Contact us to review your concrete condition, finish options, and the
+            right coating system for your space.
+          </p>
+
+          <div className="mt-6 flex flex-wrap gap-3">
+            <a
+              href={`tel:${phone}`}
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-[#ef2b37] px-6 py-3 font-display text-xs uppercase tracking-[0.2em] text-white transition hover:bg-[#c41722]"
+            >
+              <PhoneCall size={15} />
+              Call for Flake Estimate
+            </a>
+            <a
+              href="/contact"
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 py-3 font-display text-xs uppercase tracking-[0.2em] text-white transition hover:bg-white/20"
+            >
+              Request a Quote
+              <ArrowRight size={15} />
+            </a>
+          </div>
+        </motion.section>
+
+        <AnimatePresence>
+          {activeImage && (
+            <motion.div
+              className="fixed inset-0 z-[80] flex items-center justify-center bg-black/88 p-4"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={closeImagePreview}
+            >
+              <motion.div
+                className="relative max-w-5xl"
+                initial={{ scale: 0.96, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.98, opacity: 0 }}
+                transition={{ duration: 0.22, ease: 'easeOut' }}
+                onClick={(event) => event.stopPropagation()}
+              >
+                <button
+                  type="button"
+                  onClick={closeImagePreview}
+                  className="absolute right-2 top-2 z-10 inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/30 bg-black/55 text-white transition hover:bg-black/75"
+                  aria-label="Close image preview"
+                >
+                  <X size={18} />
+                </button>
+
+                <img
+                  src={activeImage.src}
+                  alt={activeImage.alt}
+                  className="max-h-[86vh] w-auto max-w-[92vw] rounded-2xl border border-white/15 object-contain shadow-2xl shadow-black/60"
+                  loading="eager"
+                />
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </motion.div>
+  )
+}
+
+function MetallicPage({ phone }) {
+  const [activeImage, setActiveImage] = useState(null)
+
+  const metallicPairs = [
+    {
+      before: '/garage-floor-before-epoxy-bowling-green-ky.jpg',
+      after: '/metallic/metallic-floor-after-garage.jpg',
+      ratio: '1 / 1',
+    },
+    {
+      before: '/metallic/metallic-garage-tesla-before-4x3.jpg',
+      after: '/metallic/metallic-garage-tesla-after-4x3.jpg',
+      ratio: '4 / 3',
+    },
+    {
+      before: '/metallic/metallic-garage-before-1x1.jpg',
+      after: '/metallic/metallic-garage-after-1x1.jpg',
+      ratio: '1 / 1',
+    },
+  ]
+
+  const metallicHighlights = [
+    {
+      label: 'Metallic Depth and Flow',
+      icon: PaintBucket,
+    },
+    {
+      label: 'Reflective Premium Finish',
+      icon: Star,
+    },
+    {
+      label: 'Built for Daily Durability',
+      icon: ShieldCheck,
+    },
+  ]
+
+  const betweenPairNotes = [
+    'Metallic systems begin with mechanical prep and profile correction to create a stable foundation. Once the surface is ready, pigmented resin layers are blended to produce depth, movement, and a custom visual effect.',
+    'After the metallic layers, a protective topcoat helps preserve gloss, improve stain resistance, and support easier routine cleaning. The final look is decorative, but the system is still designed for real daily use.',
+  ]
+
+  const resinFloorImage = '/flake flooring/metallic-resin-floor-showcase-16x9.jpg'
+
+  useEffect(() => {
+    const imageSources = [
+      '/garage-floor-before-epoxy-bowling-green-ky.jpg',
+      '/metallic/metallic-floor-after-garage.jpg',
+      '/metallic/metallic-garage-tesla-before-4x3.jpg',
+      '/metallic/metallic-garage-tesla-after-4x3.jpg',
+      '/metallic/metallic-garage-before-1x1.jpg',
+      '/metallic/metallic-garage-after-1x1.jpg',
+      resinFloorImage,
+    ]
+
+    imageSources.forEach((src) => {
+      const image = new Image()
+      image.src = src
+    })
+  }, [resinFloorImage])
+
+  const openImagePreview = (src, alt) => {
+    setActiveImage({ src, alt })
+  }
+
+  const closeImagePreview = () => {
+    setActiveImage(null)
+  }
+
+  return (
+    <motion.div
+      className="min-h-screen px-4 pb-10 pt-28 text-white sm:px-6 md:px-10"
+      initial={{ opacity: 0, y: 18 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+    >
+      <div className="mx-auto w-full max-w-7xl">
+        <a
+          href="/"
+          className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-4 py-2 font-display text-xs uppercase tracking-[0.18em] text-white transition hover:bg-white/10"
+        >
+          <ArrowRight size={14} className="rotate-180" />
+          Back to Home
+        </a>
+
+        <motion.section
+          {...sectionMotionOnLoad}
+          className="relative mt-6 overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-[#141826]/90 via-[#0b0d14]/92 to-[#1b1116]/95 p-6 md:p-10"
+        >
+          <div className="absolute -left-24 -top-20 h-56 w-56 rounded-full bg-[#ef2b37]/16 blur-3xl" />
+          <div className="absolute -bottom-28 right-6 h-56 w-56 rounded-full bg-[#758fb8]/22 blur-3xl" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(255,255,255,0.06),transparent_35%),radial-gradient(circle_at_86%_80%,rgba(239,43,55,0.14),transparent_42%)]" />
+
+          <div className="relative">
+            <p className="font-display text-xs uppercase tracking-[0.24em] text-[#ef2b37]">
+              Metallic Flooring Portfolio
+            </p>
+            <h1 className="mt-4 font-display text-5xl uppercase leading-[0.9] text-white md:text-6xl">
+              Metallic Flooring Before and After
+            </h1>
+            <p className="mt-4 max-w-3xl text-base leading-relaxed text-white/74 md:text-lg">
+              Real before and after comparisons for metallic resin flooring,
+              including reflective finishes, movement patterns, and high-clarity
+              topcoat results.
+            </p>
+
+            <div className="mt-6 grid gap-3 sm:grid-cols-3">
+              {metallicHighlights.map((item) => {
+                const Icon = item.icon
+
+                return (
+                  <div
+                    key={item.label}
+                    className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-black/28 px-3 py-2"
+                  >
+                    <Icon size={15} className="text-[#ef2b37]" />
+                    <span className="font-display text-xs uppercase tracking-[0.12em] text-white/85">
+                      {item.label}
+                    </span>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        </motion.section>
+
+        <motion.section
+          {...sectionMotionOnLoad}
+          transition={{ ...sectionMotionOnLoad.transition, delay: 0.08 }}
+          className="mx-auto mt-8 w-full max-w-6xl"
+        >
+          <div className="space-y-7">
+            {metallicPairs.map((pair, index) => (
+              <div key={`${pair.before}-${pair.after}`} className="space-y-4">
+                <motion.article
+                  className="group relative overflow-hidden rounded-3xl border border-white/10 bg-black/30"
+                  {...cardMotionOnLoad}
+                  transition={{ ...cardMotionOnLoad.transition, delay: index * 0.08 }}
+                >
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_10%_20%,rgba(239,43,55,0.12),transparent_42%),radial-gradient(circle_at_90%_82%,rgba(120,150,196,0.14),transparent_45%)]" />
+
+                  <div className="relative grid grid-cols-2 gap-3 p-3 sm:gap-4 sm:p-4 md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] md:gap-5 md:p-5">
+                    <article
+                      className="relative overflow-hidden rounded-2xl border border-white/12 bg-black/35"
+                      style={{ aspectRatio: pair.ratio }}
+                    >
+                      <button
+                        type="button"
+                        onClick={() => openImagePreview(pair.before, 'Before metallic flooring installation')}
+                        className="block h-full w-full cursor-zoom-in"
+                        aria-label="Open before image preview"
+                      >
+                        <img
+                          src={pair.before}
+                          alt="Before metallic flooring installation"
+                          className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.03]"
+                          loading="eager"
+                        />
+                      </button>
+                      <span className="absolute left-3 top-3 rounded-full border border-white/20 bg-black/55 px-3 py-1 font-display text-[10px] uppercase tracking-[0.16em] text-white/85 sm:text-xs">
+                        Before
+                      </span>
+                    </article>
+
+                    <div className="hidden items-center justify-center md:flex">
+                      <span className="before-after-divider inline-flex h-14 w-14 items-center justify-center rounded-full border border-[#ef2b37]/45 bg-[#ef2b37]/20 text-[#ef2b37]">
+                        <ArrowRight size={22} />
+                      </span>
+                    </div>
+
+                    <article
+                      className="relative overflow-hidden rounded-2xl border border-white/12 bg-black/35"
+                      style={{ aspectRatio: pair.ratio }}
+                    >
+                      <button
+                        type="button"
+                        onClick={() => openImagePreview(pair.after, 'After metallic flooring installation')}
+                        className="block h-full w-full cursor-zoom-in"
+                        aria-label="Open after image preview"
+                      >
+                        <img
+                          src={pair.after}
+                          alt="After metallic flooring installation"
+                          className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.03]"
+                          loading="eager"
+                        />
+                      </button>
+                      <span className="absolute left-3 top-3 rounded-full border border-white/20 bg-[#ef2b37]/78 px-3 py-1 font-display text-[10px] uppercase tracking-[0.16em] text-white sm:text-xs">
+                        After
+                      </span>
+                    </article>
+                  </div>
+                </motion.article>
+
+                {index < betweenPairNotes.length && (
+                  <motion.p
+                    className="rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-4 text-base leading-relaxed text-white/74 md:px-6 md:py-5 md:text-lg"
+                    {...cardMotionOnLoad}
+                    transition={{ ...cardMotionOnLoad.transition, delay: index * 0.08 + 0.04 }}
+                  >
+                    {betweenPairNotes[index]}
+                  </motion.p>
+                )}
+              </div>
+            ))}
+          </div>
+        </motion.section>
+
+        <motion.section
+          {...sectionMotionOnLoad}
+          transition={{ ...sectionMotionOnLoad.transition, delay: 0.14 }}
+          className="mx-auto mt-8 w-full max-w-6xl"
+        >
+          <div className="rounded-3xl border border-white/10 bg-gradient-to-r from-[#111726]/85 via-[#151018]/80 to-[#23161d]/82 px-6 py-6 text-center md:px-10 md:py-8">
+            <p className="inline-flex items-center gap-2 font-display text-[11px] uppercase tracking-[0.24em] text-[#ef2b37] md:text-xs">
+              <Star size={14} />
+              Metallic Lifestyle
+            </p>
+            <p className="mt-3 font-display text-3xl uppercase leading-[0.95] text-white md:text-5xl">
+              Imagine walking into a space that shines like this every day.
+            </p>
+            <p className="mt-3 text-base leading-relaxed text-white/76 md:text-xl">
+              Sleek, modern, and custom-designed just for you.
+            </p>
+            <p className="mt-4 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.03] px-4 py-2 font-display text-xs uppercase tracking-[0.18em] text-white/88">
+              <PhoneCall size={14} className="text-[#ef2b37]" />
+              Get your free quote today
+            </p>
+          </div>
+        </motion.section>
+
+        <motion.section
+          {...sectionMotionOnLoad}
+          transition={{ ...sectionMotionOnLoad.transition, delay: 0.16 }}
+          className="mx-auto mt-8 w-full max-w-6xl"
+        >
+          <article className="overflow-hidden rounded-3xl border border-white/10 bg-black/30 p-3 sm:p-4 md:p-5">
+            <button
+              type="button"
+              onClick={() => openImagePreview(resinFloorImage, 'Metallic resin floor')}
+              className="block w-full cursor-zoom-in"
+              aria-label="Open resin floor image preview"
+            >
+              <img
+                src={resinFloorImage}
+                alt="Metallic resin floor"
+                className="aspect-[16/9] w-full rounded-2xl border border-white/12 object-cover"
+                loading="eager"
+              />
+            </button>
+          </article>
+        </motion.section>
+
+        <motion.section
+          {...sectionMotionOnLoad}
+          transition={{ ...sectionMotionOnLoad.transition, delay: 0.2 }}
+          className="mt-8 rounded-3xl border border-white/10 bg-gradient-to-r from-white/[0.04] via-[#1a1012]/50 to-[#ef2b37]/[0.12] p-6 md:p-8"
+        >
+          <p className="font-display text-xs uppercase tracking-[0.24em] text-[#ef2b37]">
+            Ready for your metallic project?
+          </p>
+          <h2 className="mt-3 font-display text-4xl uppercase leading-[0.9] text-white md:text-5xl">
+            Let&apos;s build your own Metallic Flooring System
+          </h2>
+          <p className="mt-3 max-w-3xl text-base leading-relaxed text-white/72 md:text-lg">
+            Contact us to choose color direction, movement style, and topcoat
+            performance for a metallic floor that matches your space.
+          </p>
+
+          <div className="mt-6 flex flex-wrap gap-3">
+            <a
+              href={`tel:${phone}`}
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-[#ef2b37] px-6 py-3 font-display text-xs uppercase tracking-[0.2em] text-white transition hover:bg-[#c41722]"
+            >
+              <PhoneCall size={15} />
+              Call for Metallic Estimate
+            </a>
+            <a
+              href="/contact"
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 py-3 font-display text-xs uppercase tracking-[0.2em] text-white transition hover:bg-white/20"
+            >
+              Request a Quote
+              <ArrowRight size={15} />
+            </a>
+          </div>
+        </motion.section>
+
+        <AnimatePresence>
+          {activeImage && (
+            <motion.div
+              className="fixed inset-0 z-[80] flex items-center justify-center bg-black/88 p-4"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={closeImagePreview}
+            >
+              <motion.div
+                className="relative max-w-5xl"
+                initial={{ scale: 0.96, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.98, opacity: 0 }}
+                transition={{ duration: 0.22, ease: 'easeOut' }}
+                onClick={(event) => event.stopPropagation()}
+              >
+                <button
+                  type="button"
+                  onClick={closeImagePreview}
+                  className="absolute right-2 top-2 z-10 inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/30 bg-black/55 text-white transition hover:bg-black/75"
+                  aria-label="Close image preview"
+                >
+                  <X size={18} />
+                </button>
+
+                <img
+                  src={activeImage.src}
+                  alt={activeImage.alt}
+                  className="max-h-[86vh] w-auto max-w-[92vw] rounded-2xl border border-white/15 object-contain shadow-2xl shadow-black/60"
+                  loading="eager"
+                />
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </motion.div>
+  )
+}
+
 function App() {
   const phone = '270-779-9436'
   const facebookUrl = 'https://www.facebook.com/share/1CKSBtQhmn/?mibextid=wwXIfr'
@@ -1006,6 +1634,28 @@ function App() {
         <GlobalHeader facebookUrl={facebookUrl} pathname={normalizedPathname} />
         <main>
           <WorksPage phone={phone} />
+        </main>
+      </div>
+    )
+  }
+
+  if (normalizedPathname === '/flake') {
+    return (
+      <div className="min-h-screen text-white">
+        <GlobalHeader facebookUrl={facebookUrl} pathname={normalizedPathname} />
+        <main>
+          <FlakePage phone={phone} />
+        </main>
+      </div>
+    )
+  }
+
+  if (normalizedPathname === '/metallic') {
+    return (
+      <div className="min-h-screen text-white">
+        <GlobalHeader facebookUrl={facebookUrl} pathname={normalizedPathname} />
+        <main>
+          <MetallicPage phone={phone} />
         </main>
       </div>
     )
@@ -1093,21 +1743,22 @@ function App() {
     'Licensed and insured workmanship',
   ]
 
-  const gallery = [
+  const serviceShowcase = [
     {
-      title: 'Flake Garage System',
-      image: '/garage-flake-epoxy-finish-bowling-green-ky.jpg',
-      tag: 'Clean. Tough. Timeless.',
+      title: 'Flake Floor Systems',
+      image: '/flake flooring/flake-flooring-after-project-3.jpg',
+      tag: 'Durable decorative flake finish for residential and workspace floors.',
+      href: '/flake',
+      ctaLabel: 'Explore Flake Service',
+      points: ['Slip-resistant', 'Easy-clean topcoat', 'Daily traffic ready'],
     },
     {
-      title: 'Metallic Resin Flow',
-      image: '/metallic-epoxy-flooring-design-bowling-green-ky.jpg',
-      tag: 'Art-level custom movement.',
-    },
-    {
-      title: 'Commercial Durability',
-      image: '/commercial-epoxy-flooring-bowling-green-ky.jpg',
-      tag: 'Built for daily traffic.',
+      title: 'Metallic Resin Floors',
+      image: '/metallic/metallic-floor-after-garage.jpg',
+      tag: 'Premium metallic movement with reflective depth and custom color flow.',
+      href: '/metallic',
+      ctaLabel: 'Explore Metallic Service',
+      points: ['Custom movement', 'High-gloss finish', 'Wear-resistant topcoat'],
     },
   ]
 
@@ -1664,36 +2315,76 @@ function App() {
         <section className="mx-auto max-w-7xl px-4 pb-14 sm:px-6 md:px-10 md:pb-20">
           <div className="mb-8">
             <p className="font-display text-sm uppercase tracking-[0.2em] text-[#ef2b37]">
-              Featured Looks
+              Services
             </p>
             <h2 className="mt-3 font-display text-4xl uppercase leading-[0.9] text-white md:text-5xl">
-              Flooring styles with presence
+              Find the Right Floor for Your Space
             </h2>
+            <p className="mt-3 max-w-3xl text-base text-white/70 md:text-lg">
+              We specialize in high-durability flake flooring and custom metallic epoxy finishes.
+              Explore real project transformations and find the perfect look for your space.
+            </p>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-3">
-            {gallery.map((item) => (
-              <article
-                key={item.title}
-                className="group relative overflow-hidden rounded-3xl border border-white/10"
-              >
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="h-80 w-full object-cover transition duration-500 group-hover:scale-105"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/25 to-transparent" />
-                <div className="absolute inset-x-4 bottom-4 rounded-xl border border-white/15 bg-black/40 p-4 backdrop-blur-sm">
-                  <p className="font-display text-2xl uppercase text-white">
-                    {item.title}
-                  </p>
-                  <p className="mt-1 text-sm uppercase tracking-wider text-white/70">
-                    {item.tag}
-                  </p>
-                </div>
-              </article>
-            ))}
+          <div className="grid gap-6 md:grid-cols-2 md:gap-7">
+            {serviceShowcase.map((item) => {
+              const cardContent = (
+                <>
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/25 to-transparent" />
+                  <div className="absolute inset-x-3 bottom-3 rounded-xl border border-white/15 bg-black/45 p-3 backdrop-blur-sm sm:inset-x-4 sm:bottom-4 sm:p-4">
+                    <p className="font-display text-xl uppercase text-white sm:text-2xl">
+                      {item.title}
+                    </p>
+                    <p className="mt-1.5 text-xs leading-relaxed text-white/80 sm:mt-2 sm:text-sm">
+                      {item.tag}
+                    </p>
+                    <div className="mt-2.5 flex flex-wrap gap-1.5 sm:mt-3 sm:gap-2">
+                      {item.points.map((point) => (
+                        <span
+                          key={point}
+                          className="rounded-full border border-white/20 bg-black/40 px-2.5 py-1 text-[10px] text-white/85 sm:px-3"
+                        >
+                          {point}
+                        </span>
+                      ))}
+                    </div>
+                    {item.href && (
+                      <span className="mt-2.5 inline-flex items-center gap-1.5 font-display text-[11px] uppercase tracking-[0.16em] text-[#ef2b37] sm:mt-3">
+                        {item.ctaLabel || 'View Gallery'}
+                        <ArrowRight size={14} />
+                      </span>
+                    )}
+                  </div>
+                </>
+              )
+
+              if (item.href) {
+                return (
+                  <a
+                    key={item.title}
+                    href={item.href}
+                    className="group relative block aspect-square w-full overflow-hidden rounded-3xl border border-white/10"
+                  >
+                    {cardContent}
+                  </a>
+                )
+              }
+
+              return (
+                <article
+                  key={item.title}
+                  className="group relative aspect-square overflow-hidden rounded-3xl border border-white/10"
+                >
+                  {cardContent}
+                </article>
+              )
+            })}
           </div>
         </section>
 
