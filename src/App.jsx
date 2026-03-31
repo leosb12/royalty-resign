@@ -1291,7 +1291,7 @@ function MetallicPage({ phone }) {
     },
     {
       before: '/metallic/metallic-garage-tesla-before-4x3.jpg',
-      after: '/metallic/metallic-garage-tesla-after-4x3.jpg',
+      after: '/metallic/metallic-garage-tesla-after-installation-4x3.jpg',
       ratio: '4 / 3',
     },
     {
@@ -1328,7 +1328,7 @@ function MetallicPage({ phone }) {
       '/garage-floor-before-epoxy-bowling-green-ky.jpg',
       '/metallic/metallic-floor-after-garage.jpg',
       '/metallic/metallic-garage-tesla-before-4x3.jpg',
-      '/metallic/metallic-garage-tesla-after-4x3.jpg',
+      '/metallic/metallic-garage-tesla-after-installation-4x3.jpg',
       '/metallic/metallic-garage-before-1x1.jpg',
       '/metallic/metallic-garage-after-1x1.jpg',
       resinFloorImage,
@@ -1788,6 +1788,11 @@ function App() {
       answer:
         'Absolutely. We install systems for garages, basements, workshops, storefronts, and other commercial areas across Bowling Green and nearby cities.',
     },
+    {
+      question: '¿Hablan español?',
+      answer:
+        'Sí, se habla español y también atendemos en inglés. Podemos guiarte en el idioma que prefieras durante la cotización, la selección del diseño y la programación del proyecto para que todo sea claro de principio a fin.',
+    },
   ]
 
   const testimonials = [
@@ -1993,10 +1998,17 @@ function App() {
 
         <section className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:px-10 md:py-20 lg:grid-cols-[1.08fr_0.92fr]">
           <div>
-            <p className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 font-display text-xs uppercase tracking-[0.24em] text-white/80">
-              <MapPin size={14} className="text-[#ef2b37]" />
-              Bowling Green, Kentucky
-            </p>
+            <div className="mb-4 flex flex-wrap items-center gap-3 sm:gap-4">
+              <p className="inline-flex max-w-full items-center gap-1.5 rounded-full border border-[#ef2b37]/45 bg-black/35 px-3 py-1.5 font-display text-[10px] uppercase tracking-[0.16em] text-white/90 sm:text-xs">
+                <MessageCircle size={12} className="shrink-0 text-[#ef2b37]" />
+                Atención en inglés y español
+              </p>
+
+              <p className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 font-display text-xs uppercase tracking-[0.24em] text-white/80">
+                <MapPin size={14} className="text-[#ef2b37]" />
+                Bowling Green, Kentucky
+              </p>
+            </div>
 
             <h2 className="mt-6 font-display text-4xl uppercase leading-[0.9] text-white md:text-6xl">
               Built for impact. Engineered for daily wear.
