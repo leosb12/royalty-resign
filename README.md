@@ -1,16 +1,60 @@
-# React + Vite
+# Royalty Resin
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Royalty Resin** is a modern responsive website developed for a premium epoxy and resin flooring business serving residential and commercial customers in **Kentucky**.
 
-Currently, two official plugins are available:
+The website showcases the company's flooring solutions, completed projects, services, and contact options through a high-impact visual interface designed to generate customer inquiries and quote requests.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Overview
 
-## React Compiler
+The project was built to provide Royalty Resin with a professional digital presence that reflects the premium positioning of its flooring services.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+The interface combines large project imagery, strong typography, service-focused content, and clear calls to action to help potential customers quickly understand the company's offering and request an estimate.
 
-## Expanding the ESLint configuration
+## Key Features
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+* Fully responsive design
+* Interactive hero slider
+* Epoxy and resin flooring service presentation
+* Flake flooring and metallic resin sections
+* Project portfolio and completed work
+* Before-and-after project imagery
+* Company information
+* FAQ section
+* Contact and quote request calls to action
+* Direct Facebook integration
+* Mobile-friendly navigation
+
+## Technologies
+
+* **React**
+* **Vite**
+* **Tailwind CSS**
+* JavaScript
+* HTML
+* Responsive Web Design
+
+## User Experience
+
+The website was designed around conversion and easy navigation.
+
+Visitors can quickly:
+
+* Explore flooring services
+* View completed projects
+* Compare different resin flooring solutions
+* Learn about the company
+* Request a free estimate
+* Contact the business directly
+* Access its social media channels
+
+## Design
+
+The visual identity uses a dark premium aesthetic with strong contrast, large imagery, and bold typography to emphasize the quality and durability of the company's flooring work.
+
+## Purpose
+
+The project provides **Royalty Resin** with a professional web presence designed to showcase its work, communicate its services, strengthen its brand, and convert website visitors into potential customers.
+
+---
+
+**Developed by Leonardo Serrate**
